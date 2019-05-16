@@ -36,3 +36,5 @@
 **/matlab_gen
 **slprj
 
+# ignore folder
+.vscode/
