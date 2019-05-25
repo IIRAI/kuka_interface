@@ -3,6 +3,7 @@ rosshutdown
 rosinit%('http://192.168.0.150:11311')
 
 %% HOMING: define home joints positions
+% home position
 load('q_0_left')
 load('q_0_right')
 
@@ -12,6 +13,7 @@ q_right = zeros(1, 128);
 q_left(1:7)  = q_0_left;
 q_right(1:7) = q_0_right;
 
+% homing: from default to home poition
 load('q_out_left_home')
 load('q_out_right_home')
 
@@ -22,6 +24,15 @@ for i = 1:2000
     q_left_home(1:7, i)  = q_out_left_home(:, i);
     q_right_home(1:7, i) = q_out_right_home(:, i);
 end
+
+% table of number of samples for the desired trajectory
+t_prova = [300,300;...
+           300,300;...
+           800,800;...
+           800,800;...
+           800,800];
+
+max_output_len = 4000;
 
 %%
 % %% definition of pub sub and msgs
@@ -69,8 +80,7 @@ end
 % %rot_home_right = [3.1416    1.5371   -3.1416]';
 % %x_home_left = [1.3740    0.8009    1.0516]';
 % %rot_home_left = [-1.5703    0.0009    2.3554]';
-% 
-% t_prova = [300,300;300,300;800,800;800,800;800,800];
+
 % %to detect when the robot has reached last point of its trajectory
 % pos_threshold = 0.1;
 % max_output_len = 4000;

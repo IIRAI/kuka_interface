@@ -2,11 +2,11 @@ function wp = generate_waypoint_right(q, grid, disp, absolute)
 %%OUTPUT: wp is a vector of 6 numbers, 3 position cordinates and 3 euler
 %%angles
 %% INPUTS: q is the actual joint positions vector
-          % grid is a vectpr of 6 nubers, of the i-th element of grid
-          %is equal to 1, than the corresponding position coordinate/euler angle of wp 
-          %has to be computed incrementally, otherwise, the absolute
-          %position/euler angle
-          %contained in absolute has to be considered.
+          % grid is a vectpr of 6 numbers, of the i-th element of grid
+          % is equal to 1, than the corresponding position coordinate/euler angle of wp 
+          % has to be computed incrementally, otherwise, the absolute
+          % position/euler angle
+          % contained in absolute has to be considered.
 
 q_0_right = q';
 robot_ID = 'TWO_ARMS_r';
