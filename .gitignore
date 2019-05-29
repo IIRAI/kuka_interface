@@ -38,3 +38,7 @@
 
 # ignore folder
 .vscode/
+
+# ignore files 
+*.slx.autosave
+*.m~
