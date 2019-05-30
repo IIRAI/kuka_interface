@@ -1,10 +1,12 @@
 function [qd_home_left, qd_home_right] = homing(q_init_left, q_init_right, t_prova, max_output_len)
-%HOMING returns the joint trajectory to send VITO_ILIAD to the home pos.
+%HOMING returns the joint trajectory to send VITO_ILIAD to the home pose.
 %   This function defienes the `homing` state in the state-flow machine.
 % ----------------------------------------------------------------------- %
 %   INPUT:
-%       - q_init_left:  current position of the left arm (velvet)
-%       - q_init_right: current position of the right arm (hand)
+%       - q_init_left:    current position of the left arm (velvet)
+%       - q_init_right:   current position of the right arm (hand)
+%       - t_prova:        table of number of samples for the desired trajectory
+%       - max_output_len: standard length (in samples) of the trajectory evaluated
 %   OUTPUT:
 %       - qd_home_left:  joint trajectory from current to home position, 
 %                        left arm (velvet)

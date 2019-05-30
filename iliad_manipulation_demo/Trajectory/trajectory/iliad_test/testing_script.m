@@ -5,7 +5,7 @@ rosshutdown
 clear
 clc
 
-%% find home position
+%% find home position as waypoints
 
 % home position in configuration space
 load('q_0_left')
@@ -35,7 +35,44 @@ Tee_right = T_b_DH0r * Tee_right * T_DH7r_eer;
         
 home_pos_right = Tee_right(1:3,4);     % RIGHT POSITION
 
-%% DIsplay value
+%% Display value
 
 home_pos_left
 home_pos_right
+
+%% 1 testing concatenation of trajectories
+
+init_iliad_test
+
+[qd_left_1, qd_right_1] = homing(q_left_init, q_right_init,...
+                                 t_prova, max_output_len);
+
+[qd_left_2, qd_right_2] = go2pose(qd_left_1(:,end),  qd_right_1(:,end),...
+                                  pose_right, pose_left,...
+                                  t_prova, max_output_len);
+                              
+%% 2 testing concatenation of trajectories
+
+init_iliad_test
+
+[qd_left_1, qd_right_1] = go2pose(q_left_init, q_right_init,...
+                                  pose_right, pose_left,...
+                                  t_prova, max_output_len);
+
+[qd_left_2, qd_right_2] = homing(qd_left_1(:,end),  qd_right_1(:,end),...
+                                 t_prova, max_output_len);
+
+
+
+%% concatenate
+q_left  = [qd_left_1, qd_left_2];
+q_right = [qd_right_1, qd_right_2];
+
+%% plot testing concatenation
+
+figure
+hold on
+grid on
+for i = 1:7
+    plot(qd_left_1(i,1:300))
+end

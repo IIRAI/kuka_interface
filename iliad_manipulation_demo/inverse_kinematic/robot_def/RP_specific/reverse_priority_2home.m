@@ -1,4 +1,5 @@
 function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0, qd_0, x_des, unil_constr, x_cons, param_vect)
+%REVERSE_PRIORITY_2HOME is a modification of `reverse_priority_pos_or_7j`
 %{
 ===========================================================================
 	Exactly as the general reverse_priority.m, but enhanced in performance.
@@ -8,6 +9,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     - all 7 joints limits constraints
     - position task
     - orientation task
+    - desired final joint pose
 
     J_and_T_hand is a new input containing the function handles for J and
     T.
@@ -54,7 +56,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     e{15,1} = (x_des{15,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
-   
+        
     for k = 2 : iter_num
         
         % user message
