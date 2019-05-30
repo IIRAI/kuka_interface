@@ -1,5 +1,5 @@
 function [q, qd, e] = reverse_priority(N, Ts, iter_num, q_0, qd_0, x_des, unil_constr, x_cons, param_vect, Jsym, xsym)
-%{
+%{                                     
 ===========================================================================
 	This function executes the reverse priority algorithm, which computes 
     the joint velocities necessary for multiple tasks execution. 

@@ -1,4 +1,4 @@
-function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, q_0, qd_0, x_des, unil_constr, x_cons, param_vect)
+function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0, qd_0, x_des, unil_constr, x_cons, param_vect)
 %{
 ===========================================================================
 	Exactly as the general reverse_priority.m, but enhanced in performance.
@@ -38,10 +38,19 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
     J{11} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 3 max unilateral constraint
     J{12} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 3 min unilateral constraint 
     J{13} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 max unilateral constraint
-    J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint   
+    J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint  
+    
+    % configuration space position task
+    J{17} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
+    J{18} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
+    J{19} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
+    J{20} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
+    J{21} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
+    J{22} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
+    J{23} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
         
     % (qdMAX) error init for variable gain 
-    e = cell(16,1);              	
+    e = cell(23,1);              	
     e{15,1} = (x_des{15,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
@@ -64,28 +73,38 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
             q7 = q(7, k-1);
 
             % numeric jacobian
-            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]);  
-            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);   
+            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
             x{16,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
             x{15,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
 
-            x{13,k} = q1;
-            x{14,k} = q1;
-            x{1,k} = q7;
-            x{2,k} = q7;
-            x{3,k} = q6;
-            x{4,k} = q6;
-            x{5,k} = q5;
-            x{6,k} = q5;
-            x{7,k} = q4;
-            x{8,k} = q4;
-            x{9,k} = q3;
+            % max/min joint limit
+            x{1,k}  = q7;
+            x{2,k}  = q7;
+            x{3,k}  = q6;
+            x{4,k}  = q6;
+            x{5,k}  = q5;
+            x{6,k}  = q5;
+            x{7,k}  = q4;
+            x{8,k}  = q4;
+            x{9,k}  = q3;
             x{10,k} = q3;
             x{11,k} = q2;
             x{12,k} = q2;
-            
+            x{13,k} = q1;
+            x{14,k} = q1;
+
+            % task to achieve desired joint configuration (home desired configuration)
+            x{17,k} = q1; 
+            x{18,k} = q2;
+            x{19,k} = q3; 
+            x{20,k} = q4;
+            x{21,k} = q5; 
+            x{22,k} = q6;
+            x{23,k} = q7;
+
         % -----------------------------------------------------------------
         
         x_cur = x(:,k);                     % x: cell array 

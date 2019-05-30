@@ -15,7 +15,8 @@ t_prova = [300,300;...
 max_output_len = 4000;
 
 %% Initial configuration
-% avoid starting from singularity when usind rviz
+% avoid starting from singularity when usind rviz, unless RP would
+% stuck/crash
 q_left_init  = [0.1, 0.1, 0.1, 0, 0,  1, -1.5]';
 q_right_init = [0.1, 0.1, 0.1, 0, 0, -1,    0]';
 
