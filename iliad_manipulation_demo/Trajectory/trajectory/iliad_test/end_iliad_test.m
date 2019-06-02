@@ -1,3 +1,0 @@
-rosshutdown
-clear
-clc
