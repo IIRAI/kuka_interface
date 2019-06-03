@@ -39,11 +39,11 @@ q_right_init = [0.1, 0.1, 0.1, 0, 0, -1,    0]';
 %                                        +----->___________|
 
 % deafault end_effectors position in table reference system
-% ee_left_t_def  = [0.8, 0.1, 0.1, -pi/2, 0, 0]';
-% ee_right_t_def = [0.0, 0.1, 0.1, -pi/2, 0, 0]';
-ee_left_t_def  = [0.0, 0.1, 0.1, pi/2, 0, 0]';
-ee_right_t_def = [0.8, 0.1, 0.1, pi/2, 0, 0]';
+% default_left  = [0.8, 0.1, 0.1, -pi/2, 0, 0]';
+% default_right = [0.0, 0.1, 0.1, -pi/2, 0, 0]';
+default_left  = [0.0, 0.1, 0.1, pi/2, 0, 0]';
+default_right = [0.8, 0.1, 0.1, pi/2, 0, 0]';
 
 % default position and orientation of the `left_arm_7_link` and `right_arm_7_link`
-pose_left_def  = ee_2_left7link(ee_left_t_def);
-pose_right_def = ee_2_right7link(ee_right_t_def);
+pose_left_def  = ee_2_left7link(default_left);
+pose_right_def = ee_2_right7link(default_right);
