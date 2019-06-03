@@ -19,7 +19,7 @@ ee_rot_offset = [-pi/2, 0, -pi/2];
 R_offset = eul2rotm(ee_rot_offset, 'ZYX');
 
 % rotation of the velvet tray
-Rot      = eul2rotm(velvet_pose(end-2:end)', 'ZYX');
+Rot = eul2rotm(velvet_pose(end-2:end)', 'ZYX');
 
 %% compute velvet offset in global frame
 velvet_offset = R_offset * Rot * velvet_offset_local;

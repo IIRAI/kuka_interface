@@ -42,3 +42,4 @@
 # ignore files 
 *.slx.autosave
 *.m~
+*.slxc

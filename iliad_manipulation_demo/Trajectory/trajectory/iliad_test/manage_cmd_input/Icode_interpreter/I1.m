@@ -5,7 +5,8 @@
 %      defined in the `init` script of the `iliad_test`.
 %      Note that new pose definition overwrite the default pose!
 %   2- The input must be a vector 6x1 the first three values are the 
-%      x, y, z position and the last three values are the three orientation.
+%      x, y, z position and the last three values are the three orientation
+%      following the ZYX convention.
 %   3- If the position or the orientation remain constant substitute the 
 %      three values with NaN, the following are admissible values:
 %            [NaN; 0; 0; 0]  % the robot maintains the current position
@@ -14,47 +15,43 @@
 %      `ee_left_t_def`, `ee_right_t_def`
 
 %% left arm position
-left = input('iliad_test command: $ left pose [default]:');
+left = input('iliad_test command: $ left pose [idle]: ');
 
-if isempty(left) % mantain current position
-    left_current = str2num(get_param('iliad_test/pose_left', 'Value'));     % the position in in global ref
-    left = left7link_2_ee(left_current);                                    % convert the position in table position
-else % input position
+if ~isempty(left) % input position if empty maintain position
     if isnan(left(1))       % change just the orientation
-        left_current = str2num(get_param('iliad_test/pose_left', 'Value')); % the position in in global ref
-        left = [left_current(1:3); left(2:4)];
-        left = left7link_2_ee(left);                                        % convert the position in table position
+        left_current_7link = str2num(get_param('iliad_test/pose_left', 'Value')); % position of the 7 link in in global ref
+        left_current_ee    = left7link_2_ee(left_current_7link);                  % convert in ee position in table position
+        left = [left_current_ee(1:3); left(2:4)];
     elseif isnan(left(4))   % change just the position
-        left_current = str2num(get_param('iliad_test/pose_left', 'Value')); % the position in in global ref but here is useless
-        left = [left(1:3); left_current(4:6)];
+        left_current_7link = str2num(get_param('iliad_test/pose_left', 'Value')); % position of the 7 link in in global ref but here is useless
+        left = [left(1:3); left_current_7link(4:6)];
     end
     
-    % update left position
+    % the RP control the 7 link pose, let's obtain it from the ee pose
     left = ee_2_left7link(left);
+    % update left position
     set_param('iliad_test/pose_left', 'Value',...
               sprintf('[%f;%f;%f;%f;%f;%f]', left(1),left(2),left(3),...
                                              left(4),left(5),left(6))...
              );
 end
 
-%% right arm position
-right = input('iliad_test command: $ right pose [default]: ');
+%% right arm position (do the same as the left arm!)
+right = input('iliad_test command: $ right pose [idle]: ');
 
-if isempty(right) % default position
-    right_current = str2num(get_param('iliad_test/pose_right', 'Value'));   % the position in in global ref
-    right = right7link_2_ee(right_current);                                 % convert the position in table position
-else % input position
+if ~isempty(right) % input popsition if empty maintain position
     if isnan(right(1))      % change just the orientation
-        right_current = str2num(get_param('iliad_test/pose_right', 'Value')); % the position in in global ref
-        right = [right_current(1:3); right(2:4)];
-        right = right7link_2_ee(right);                                       % convert the position in table position
+        right_current_7link = str2num(get_param('iliad_test/pose_right', 'Value')); % position of the 7 link in in global ref
+        right_current_ee    = right7link_2_ee(right_current_7link);                 % convert in ee position in table position
+        right = [right_current_ee(1:3); right(2:4)];
     elseif isnan(right(4))  % change just the position
-        right_current = str2num(get_param('iliad_test/pose_right', 'Value')); % the position in in global ref but here is useless
-        right = [right(1:3); right_current(4:6)];
+        right_current_7link = str2num(get_param('iliad_test/pose_right', 'Value')); % position of the 7 link in in global ref but here is useless
+        right = [right(1:3); right_current_7link(4:6)];
     end
     
-    % update right position
+    % the RP control the 7 link pose, let's obtain it from the ee pose
     right = ee_2_right7link(right);
+     % update right position
     set_param('iliad_test/pose_right', 'Value',...
               sprintf('[%f;%f;%f;%f;%f;%f]', right(1),right(2),right(3),...
                                              right(4),right(5),right(6))...

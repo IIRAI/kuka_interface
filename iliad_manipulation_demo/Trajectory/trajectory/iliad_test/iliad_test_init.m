@@ -8,8 +8,7 @@ rosinit%('http://192.168.0.150:11311')
 
 %% Simulink parameters
 
-global pose_left_def pose_right_def
-global max_output_len pos_threshold
+global default_left default_right
 
 % table of number of samples for the desired trajectory
 t_prova = [300,300;...
