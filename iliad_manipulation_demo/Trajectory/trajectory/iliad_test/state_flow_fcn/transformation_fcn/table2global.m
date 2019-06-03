@@ -33,4 +33,3 @@ pose_in_table(1:3) = Rot_table * pose_in_table(1:3);
 pose_in_global = table_position + pose_in_table;
 
 end
-

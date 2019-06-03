@@ -18,13 +18,12 @@ while ask_command
             case '0' % homing
                 set_param('iliad_test/Icode','Value', '0');
             case '1' 
-                I1; % go to default position
-            case '2' 
-                I2; % go to position
+                I1; % go to position
             otherwise
                 warning('Unexpected Icode, type h for help ¯\_(⊙︿⊙)_/¯ ')
         end
     else
+        
     % interpret command
         switch cmd
             case 'h'         % print help

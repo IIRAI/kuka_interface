@@ -8,5 +8,5 @@ disp('`end`:     close the command interpreter             ');
 disp('- Icode ---------------------------------------------');
 disp('`Ix`:      command to vito-iliad the x Icode         ');
 disp('      `I0`: homing                                   ');
-disp('      `I1`: default movement                         ');
+disp('      `I1`: go to specified pose                     ');
 disp('-----------------------------------------------------');

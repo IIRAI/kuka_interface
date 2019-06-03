@@ -28,4 +28,3 @@ velvet_offset = R_offset * Rot * velvet_offset_local;
 left_arm_7_link = velvet_pose + [velvet_offset; zeros(3,1)];
 
 end
-
