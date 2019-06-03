@@ -18,7 +18,7 @@ function [pose_in_global] = table2global(pose_in_table)
 % table dimension from rviz model
 % length = 0.6 [m]
 % width  = 0.8 [m]
-% height = 0.70 [m]
+% height = 0.7 [m]
 % 
 % ------------------------------------------------------------------------
 

@@ -1,11 +1,14 @@
-function [right_arm_7_link] = ee_2_right7link(hand_pose)
+function [right_arm_7_link] = ee_2_right7link(hand_pose_t)
 %EE_2_RIGHT7LINK returns the right_arm_7_link pose for RP position control
 %   INPUT:
 %       - `hand_pose`: 6x1 vector containing the position and orientation
-%                      of the soft hand in global reference system
+%                      of the soft hand in table reference system
 %   OUTPUT:
 %       - `right_arm_7_link`: 6x1 vector containing the position and orientation
 %                             of the right_arm_7_link wrt the global ref sys
+
+%% obtain hand position in global reference system
+hand_pose  = table2global(hand_pose_t);
 
 %% soft hand offset wrt the right_arm_7_link in local frame
 hand_offset_local = [0, 0, -0.20]';

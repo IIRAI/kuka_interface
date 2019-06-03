@@ -1,11 +1,14 @@
-function [left_arm_7_link] = ee_2_left7link(velvet_pose)
+function [left_arm_7_link] = ee_2_left7link(velvet_pose_t)
 %EE_2_LEFT7LINK returns the left_arm_7_link pose for RP position control
 %   INPUT:
 %       - `velvet_pose`: 6x1 vector containing the position and orientation
-%                        of the velvet tray in global reference system
+%                        of the velvet tray in table reference system
 %   OUTPUT:
 %       - `left_arm_7_link`: 6x1 vector containing the position and orientation
 %                            of the left_arm_7_link wrt the global ref sys
+
+%% obtain velvet position in global reference system
+velvet_pose  = table2global(velvet_pose_t);
 
 %% velvet offset wrt the left_arm_7_link in local frame
 velvet_offset_local = [0, 0, -0.14]';
