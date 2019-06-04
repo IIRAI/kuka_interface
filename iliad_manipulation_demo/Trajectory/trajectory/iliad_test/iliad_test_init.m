@@ -46,3 +46,9 @@ default_right = [0.8, 0.1, 0.1, pi/2, 0, 0]';
 % default position and orientation of the `left_arm_7_link` and `right_arm_7_link`
 pose_left_def  = ee_2_left7link(default_left);
 pose_right_def = ee_2_right7link(default_right);
+
+%% Define movement to be executed for I2 Icode
+
+
+% I2_move_left  = ;
+% I2_move_right = ;
