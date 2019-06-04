@@ -57,6 +57,3 @@ if ~isempty(right) % input popsition if empty maintain position
                                              right(4),right(5),right(6))...
              );
 end
-
-%% set Icode value
-set_param('iliad_test/Icode','Value', '1');

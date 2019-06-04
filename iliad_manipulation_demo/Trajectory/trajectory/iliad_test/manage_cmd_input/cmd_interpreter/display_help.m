@@ -9,4 +9,5 @@ disp('- Icode ---------------------------------------------');
 disp('`Ix`:      command to vito-iliad the x Icode         ');
 disp('      `I0`: homing                                   ');
 disp('      `I1`: go to specified pose                     ');
+disp('      `I2`: make a pre-defined movement              ');
 disp('-----------------------------------------------------');
