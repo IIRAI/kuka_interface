@@ -12,7 +12,7 @@ else
             I1;
             set_param('iliad_test/Icode','Value', '1');
         case '2' % moke pre-defined movement
-            set_param('iliad_test/Icode','Value', '2'); % go to position
+            set_param('iliad_test/Icode','Value', '2');
         otherwise
             warning('Unexpected Icode, type h for help ¯\_(⊙︿⊙)_/¯ ')
     end
