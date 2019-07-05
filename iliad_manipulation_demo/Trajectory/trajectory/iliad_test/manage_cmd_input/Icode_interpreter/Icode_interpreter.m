@@ -11,7 +11,8 @@ else
         case '1' % go to position
             I1;
             set_param('iliad_test/Icode','Value', '1');
-        case '2' % moke pre-defined movement
+        case '2' % make pre-defined movement based on the object position
+            I2;
             set_param('iliad_test/Icode','Value', '2');
         otherwise
             warning('Unexpected Icode, type h for help ¯\_(⊙︿⊙)_/¯ ')

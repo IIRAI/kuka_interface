@@ -7,8 +7,8 @@ function [qd_left, qd_right] = go2pose(q_init_left, q_init_right,...
 %   INPUT:
 %       - q_init_left:    current position of the left arm (velvet)
 %       - q_init_right:   current position of the right arm (hand)
-%       - pose_left:      [6x1] vector with pose and orientation of the left ee
-%       - pose_right:     [6x1] vector with pose and orientation of the right ee
+%       - pose_left:      [nx1] vector with pose and orientation of the left ee
+%       - pose_right:     [nx1] vector with pose and orientation of the right ee
 %       - t_prova:        table of number of samples for the desired trajectory
 %       - max_output_len: standard length (in samples) of the trajectory evaluated
 %   OUTPUT:

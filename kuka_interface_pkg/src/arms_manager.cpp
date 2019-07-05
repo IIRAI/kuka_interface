@@ -547,7 +547,7 @@ void ArmsManager::emergency_callback(const std_msgs::Bool& msg)
   left_arm_stopped.store(msg.data);
   right_arm_stopped.store(msg.data);
   
-  //FIXME communicate to matlab the event separately
+  //FIXME: communicate to matlab the event separately
   force_flag_left.store(shared_msgs::FeedbackTrajectory::SENSED_ERROR);
   force_flag_right.store(shared_msgs::FeedbackTrajectory::SENSED_ERROR);
 }

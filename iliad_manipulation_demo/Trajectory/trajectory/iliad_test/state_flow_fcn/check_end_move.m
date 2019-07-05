@@ -1,6 +1,6 @@
 function [flag_state] = check_end_move(qd_left, qd_right, q_left, q_right,...
                                        max_output_len, pos_threshold)
-%CHECK_END_MOVE check if the movement is ended evaluating the error 
+%CHECK_END_MOVE check if the movement is ended evaluating the position error 
 % between the robot state and the desired final position.
 %   INPUT:
 %       - `qd_left`:        desired left trajectory

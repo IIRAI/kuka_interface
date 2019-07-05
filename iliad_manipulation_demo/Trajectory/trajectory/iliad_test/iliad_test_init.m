@@ -45,16 +45,8 @@ default_right = [0.8, 0.1, 0.1, pi/2, 0, 0]';
 pose_left_def  = ee_2_left7link(default_left);
 pose_right_def = ee_2_right7link(default_right);
 
-%% Define movement to be executed for I2 Icode
-
-% right hand waypoint
-w1_r = [0.5; -0.1; 0.2];
-w2_r = [0.4;  0.0; 0.2];
-w3_r = [0.5;  0.1; 0.2];
-w4_r = [0.6;  0.0; 0.2];
-% movement of the ee in table reference system
-I2_move_left_t  = [0; 0.1; 0.1; 0; 0; 0.; 0; 0; 0];
-I2_move_right_t = [w1_r; w2_r; w3_r; w4_r; pi/2; 0; 0];
-% movement of the 7 link in global reference system
-I2_move_left  = ee_2_left7link(I2_move_left_t);
-I2_move_right = ee_2_right7link(I2_move_right_t);
+%% Display next step advice
+disp(' ')
+disp('----------------------------')
+disp('---> RUN iliad_test.slx <---')
+disp('----------------------------')

@@ -5,7 +5,7 @@ clc
 display_help;
 disp(' ');
 
-% loop flag
+% command loop flag
 ask_command = 1;
 
 while ask_command

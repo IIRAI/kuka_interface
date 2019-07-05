@@ -7,9 +7,8 @@
 %% initialize variables
 iliad_test_init
 
-disp('run iliad_test.slx')
-%% display iliad_test command prompt
+%% display iliad_test command prompt to interact with the robot
 activate_command
 
-%% close matlab-ROS global node and clear all variables
+%% close matlab-ROS global node and clear all workspace variables
 iliad_test_end
