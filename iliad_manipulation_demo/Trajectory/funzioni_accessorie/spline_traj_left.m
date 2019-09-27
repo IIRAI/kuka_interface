@@ -1,22 +1,23 @@
-function q_out = spline_traj_left(t_prova, q_0_right_, wp2_pos, wp2_rot,t_rot)
+function q_out = spline_traj_left(t_prova, q_0_right_, wp2_pos, wp2_rot, t_rot)
 
-%t_prova = number of samples of the trajectory.
-%q_0_right= iniital position
-%wp2_pos = list of waypoints coordinates
-%wp_rot = desired attitude in home ee frame
-%this function creates a joint position trajectory starting from q_0_right.
-%the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
-%generate_line_trajectory between the first attitude (corresponding to the
-%ee orientation when the robot is in q_0_right) and the attitude described
-%by wp_rot
+% t_prova:   number of samples of the trajectory.
+% q_0_right: initial position
+% wp2_pos:   list of waypoints coordinates
+% wp_rot:    desired attitude in home ee frame
+%
+% this function creates a joint position trajectory starting from q_0_right.
+% the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
+% generate_line_trajectory between the first attitude (corresponding to the
+% ee orientation when the robot is in q_0_right) and the attitude described
+% by wp_rot
 
-%number of waypoints
-wp_num = length(wp2_pos)/3;
+% number of waypoints
+wp_num    = length(wp2_pos) / 3;
 t_samples = 0 : wp_num;
-step = t_samples(end)/t_prova;
-t = 0 : step : (wp_num-step);
+step      = t_samples(end) / t_prova;
+t = 0 : step : (wp_num - step);
                 
-        %%
+%%
 q_0_right = zeros(1,7);
 for i = 1 : 7
     q_0_right(i) = q_0_right_(i);
@@ -26,7 +27,7 @@ robot_ID = 'TWO_ARMS_l';
 %% q
 qd_0 = zeros(7, 1);
   
-%%   Initialize KUKA transformation
+%% Initialize KUKA transformation
 % T_b_0 = T_b_DH0 expressed in b
 
 % from base to 0right = DH_0

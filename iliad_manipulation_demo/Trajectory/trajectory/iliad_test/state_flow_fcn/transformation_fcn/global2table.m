@@ -22,7 +22,7 @@ function [pose_in_table] = global2table(pose_in_global)
     % 
     % ------------------------------------------------------------------------
     
-    % table position, see rviz.
+    % table position, see rviz.global2table(pose_in_global)
     table_position = [1.3500; 1.2010; 0.7000; zeros(3,1)];
     
     % position wrt the table written in the global reference system

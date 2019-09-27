@@ -1,14 +1,14 @@
 function q_out = spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot,t_rot)
 
-%t_prova = number of samples of the trajectory.
-%q_0_right= iniital position
-%wp2_pos = list of waypoints coordinates
-%wp_rot = desired attitude in home ee frame
-%this function creates a joint position trajectory starting from q_0_right.
-%the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
-%generate_line_trajectory between the first attitude (corresponding to the
-%ee orientation when the robot is in q_0_right) and the attitude described
-%by wp_rot
+% t_prova = number of samples of the trajectory.
+% q_0_right= iniital position
+% wp2_pos = list of waypoints coordinates
+% wp_rot = desired attitude in home ee frame
+% this function creates a joint position trajectory starting from q_0_right.
+% the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
+% generate_line_trajectory between the first attitude (corresponding to the
+% ee orientation when the robot is in q_0_right) and the attitude described
+% by wp_rot
 
 %number of waypoints
 wp_num = length(wp2_pos)/3;

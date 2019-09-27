@@ -1,5 +1,6 @@
 %% I1 execute the Icode 1 command.
-% move the vito-iliad robot to the specified position.
+% move the vito-iliad robot to the specified position w.r.t. the table reference
+% system.
 % Remark - how to use this command:
 %   1- If the input is left empty the robot goes to the default position
 %      defined in the `init` script of the `iliad_test`.
@@ -21,10 +22,10 @@
 left = input('iliad_test command: $ left pose [idle]: ');
 left = reshape(left, length(left), 1); % make sure it is a column
 % update simulink model
-set_pose_left(left)
+set_pose_left(left, 'reverse_priority')
 
 %% right arm position (do the same as the left arm!)
 right = input('iliad_test command: $ right pose [idle]: ');
 right = reshape(right, length(right), 1); % make sure it is a column
 % update simulink model
-set_pose_right(right)
+set_pose_right(right, 'reverse_priority')

@@ -1,4 +1,4 @@
-function set_pose_right(right)
+function set_pose_right(right, reference)
 %SET_POSE_RIGHT set the joint value in the simulink model as asked in input
 %
 %   How this function interpret the input:
@@ -16,8 +16,13 @@ function set_pose_right(right)
 %   4- One default pose exists for each arm, they are: 
 %            `pose_right_def`
 %      they are defined in the `init` script of the `iliad_test`.
+%
+%   reference: is a string with value 'reverse_priority' or 'dual_manipulation',
+%   this specifies which reference system the hand uses, since the dual
+%   manipulation project adopted a different reference system for the hand
+%   and a different [0, 0, 0] orientation.
 
-if ~isempty(right) % input popsition if empty maintain position
+if ~isempty(right) % input position if empty mantain position
     if isnan(right(1))      % change just the orientation
         right_current_7link = str2num(get_param('iliad_test/pose_right', 'Value')); % position of the 7 link in in global ref
         right_current_ee    = right7link_2_ee(right_current_7link);                 % convert in ee position in table position
@@ -26,15 +31,17 @@ if ~isempty(right) % input popsition if empty maintain position
         right_current_7link = str2num(get_param('iliad_test/pose_right', 'Value')); % position of the 7 link in in global ref but here is useless
         right = [right(1:3); right_current_7link(4:6)];
     end
-    
-    % the RP control the 7 link pose, let's obtain it from the ee pose
-    right = ee_2_right7link(right);
-     % update right position
-    set_param('iliad_test/pose_right', 'Value',...
-              sprintf('[%f;%f;%f;%f;%f;%f]', right(1),right(2),right(3),...
-                                             right(4),right(5),right(6))...
-             );
+else
+    right = str2num(get_param('iliad_test/pose_right', 'Value')); % position of the 7 link in in global ref
 end
+   
+% the RP controls the 7th link pose, let's obtain it from the ee pose
+right = ee_2_right7link(right, reference);
+% update right position
+set_param('iliad_test/pose_right', 'Value',...
+          sprintf('[%f;%f;%f;%f;%f;%f]', right(1),right(2),right(3),...
+                                         right(4),right(5),right(6))...
+         );
 
 end
 

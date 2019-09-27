@@ -1,4 +1,4 @@
-function set_pose_left(left)
+function set_pose_left(left, reference)
 %SET_POSE_LEFT set the joint value in the simulink model as asked in input
 %
 %   How this function interpret the input:
@@ -16,6 +16,11 @@ function set_pose_left(left)
 %   4- One default pose exists for each arm, they are: 
 %            `pose_left_def`
 %      they are defined in the `init` script of the `iliad_test`.
+%
+%   reference: is a string with value 'reverse_priority' or 'dual_manipulation',
+%   this specifies which reference system the hand uses, since the dual
+%   manipulation project adopted a different reference system for the hand
+%   and a different [0, 0, 0] orientation.
 
 if ~isempty(left) % input position if empty maintain position
     if isnan(left(1))       % change just the orientation
@@ -25,16 +30,17 @@ if ~isempty(left) % input position if empty maintain position
     elseif isnan(left(4))   % change just the position
         left_current_7link = str2num(get_param('iliad_test/pose_left', 'Value')); % position of the 7 link in in global ref but here is useless
         left = [left(1:3); left_current_7link(4:6)];
-    end
-    
-    % the RP control the 7 link pose, let's obtain it from the ee pose
-    left = ee_2_left7link(left);
-    % update left position
-    set_param('iliad_test/pose_left', 'Value',...
-              sprintf('[%f;%f;%f;%f;%f;%f]', left(1),left(2),left(3),...
-                                             left(4),left(5),left(6))...
-             );
+    end   
+else
+    left = str2num(get_param('iliad_test/pose_left', 'Value'));   % position of the 7 link in in global ref
 end
 
+% the RP control the 7 link pose, let's obtain it from the ee pose
+left = ee_2_left7link(left, reference);
+% update left position
+set_param('iliad_test/pose_left', 'Value',...
+          sprintf('[%f;%f;%f;%f;%f;%f]', left(1),left(2),left(3),...
+                                         left(4),left(5),left(6))...
+         );
 end
 
