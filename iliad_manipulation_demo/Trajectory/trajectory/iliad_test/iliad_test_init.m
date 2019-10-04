@@ -9,6 +9,8 @@ rosinit%('http://192.168.0.150:11311')
 %% Simulink parameters
 
 global pose_left_def pose_right_def
+global manipulation_mov
+manipulation_mov = [];
 
 % table of number of samples for the desired trajectory
 t_prova = [300,300;...

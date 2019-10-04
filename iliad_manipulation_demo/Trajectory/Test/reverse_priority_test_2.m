@@ -1,5 +1,5 @@
-function response = reverse_priority_test(~, reqMsg, response)
-%REVERSE_PRIORITY_TEST testing the service with ROS indigo in docker container
+function response = reverse_priority_test_2(~, reqMsg, response)
+%REVERSE_PRIORITY_TEST_2 testing the service with ROS indigo in docker container
   % input:
     % `first`:  is the associated service server object.
     % `second`: is the request message object sent by the service client.
@@ -14,6 +14,13 @@ function response = reverse_priority_test(~, reqMsg, response)
 %   ack      -->   Ack
 %   command  -->   Command
 %   ee_name  -->   EeName
+
+global manipulation_mov
+
+persistent waypoints   % stores the waypoints received from ROS
+if isempty(waypoints)
+    waypoints = [];
+end
       
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 disp(' ')
@@ -40,30 +47,26 @@ disp(pose)
 if strcmp(ee_name, 'right_hand')
     % update simulink model
     disp('setting RIGHT hand')
-    set_pose_right(pose, 'dual_manipulation')
-    set_param('iliad_test/pose_left', 'Value',... % this way the left ee remains still
-    sprintf('[%f;%f;%f;%f;%f;%f]', 0,0,0,0,0,0));
-    set_param('iliad_test/Icode', 'Value', '1');
+    pose_right = ee_2_right7link(pose, 'dual_manipulation');
+    waypoint = [zeros(6,1); pose_right];
+    waypoints = [waypoints, waypoint];
 elseif strcmp(ee_name, 'left_hand')
     % update simulink model
     disp('setting LEFT hand')
-    set_pose_left(pose, 'dual_manipulation')
-    set_param('iliad_test/pose_right', 'Value',... % this way the left ee remains still
-    sprintf('[%f;%f;%f;%f;%f;%f]', 0,0,0,0,0,0));
-    set_param('iliad_test/Icode', 'Value', '1');
+    pose_left = ee_2_left7link(pose, 'dual_manipulation');
+    waypoint = [pose_left; zeros(6,1)];
+    waypoints = [waypoints, waypoint];
 else % here should be something like full robot
     % homing
-    disp('going HOME')
-    set_param('iliad_test/Icode', 'Value', '0');
+    disp('The waypoint list is ended!')
+    manipulation_mov = waypoints;
+    waypoints = [];
+    disp('setting Icode value to 3...')
+    set_param('iliad_test/Icode', 'Value', '3');
 end
 
-disp(' ')
-disp('waiting to execute the movement...')
-
-disp('... movement executed.')
 disp(' ')
 
 response.Ack = true;
 
 end
-

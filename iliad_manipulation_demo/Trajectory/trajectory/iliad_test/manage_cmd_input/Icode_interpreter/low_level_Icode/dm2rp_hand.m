@@ -14,15 +14,16 @@ dmX = dm_angle(3);
 
 % evaluate ZY in reverse priority
 tan_rpZ = sin(dmZ) / tan(dmY);
-sin_rpY = - cos(dmZ) * cos(dmY);
+sin_rpY = cos(dmZ) * cos(dmY);
 
 rpZ = atan(tan_rpZ);
 rpY = asin(sin_rpY);
 
 % evaluate X
-cos_rpX = ((sin(dmZ) * sin(dmX)) + (cos(dmZ) * cos(dmX) * sin(dmY))) / cos(rpY);
+tan_rpX = ((sin(dmZ) * cos(dmX)) - (cos(dmZ) * sin(dmX) * sin(dmY))) /...
+          ((sin(dmX) * sin(dmZ)) + (sin(dmY) * cos(dmX) * cos(dmZ)));
 
-rpX = acos(cos_rpX);
+rpX = atan(tan_rpX);
 
 % set up the output
 rp_angle = [rpZ; rpY; rpX];
