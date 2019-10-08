@@ -17,7 +17,7 @@ wp_num = length(wp2_pos)/3;
 t_samples = 0 : wp_num;
 step = t_samples(end)/t_prova;
 t = 0 : step : (wp_num-step);
-                
+
 %%
 q_0_right = zeros(1,7);
 for i = 1 : 7
@@ -79,8 +79,8 @@ beta_vel = 0.1;
 
 lambda = 0.9;    
 
-kp = 0.8;                                   % position error gain
-ko = 0.5;                                   % orientation error gain
+kp = 0.008;                                   % position error gain
+ko = 0.005;                                   % orientation error gain
 K = [ones(1,14), kp, ko, 0.01*ones(1,7)];  	% error gain vector
 T_b_DH0 = T_b_DH0l;
 T_DH7_ee = T_DH7l_eel;

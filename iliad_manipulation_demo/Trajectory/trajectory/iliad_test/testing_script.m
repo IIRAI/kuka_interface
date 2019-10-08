@@ -42,13 +42,16 @@ home_pos_right
 
 %% 1 testing concatenation of trajectories
 
-init_iliad_test
+iliad_test_init
+
+pose_left  = [0.8, 0.8, 0.8, pi/2, 0, 0]';
+pose_right = [0.8, 0.8, 0.8, pi/2, 0, 0]';
 
 [qd_left_1, qd_right_1] = homing(q_left_init, q_right_init,...
                                  t_prova, max_output_len);
 
 [qd_left_2, qd_right_2] = go2pose(qd_left_1(:,end),  qd_right_1(:,end),...
-                                  pose_right, pose_left,...
+                                  pose_left, pose_right,...
                                   t_prova, max_output_len);
                               
 %% 2 testing concatenation of trajectories
@@ -56,7 +59,7 @@ init_iliad_test
 init_iliad_test
 
 [qd_left_1, qd_right_1] = go2pose(q_left_init, q_right_init,...
-                                  pose_right, pose_left,...
+                                  pose_left, pose_right,...
                                   t_prova, max_output_len);
 
 [qd_left_2, qd_right_2] = homing(qd_left_1(:,end),  qd_right_1(:,end),...
@@ -76,3 +79,14 @@ grid on
 for i = 1:7
     plot(qd_left_1(i,1:300))
 end
+
+%%
+figure
+hold on
+grid on
+for i = 1:7
+    plot(q_left(i,:))
+end
+
+%%
+gradient(qd_left_1(1,1:300), 0.01)

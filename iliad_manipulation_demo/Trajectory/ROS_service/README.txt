@@ -8,3 +8,6 @@ The main communication between the ROS software (Dual Manipulation) and the
 Matlab software (Reverse Priority) is achieved using "ROS services".
 I hope that one day everything will work in a single environment, probably ROS,
 so that this testing is useless.
+
+Remark: `reverse_priority_service.m` is used in the main program, it implements
+and manages the comuniation between Dual Manipulation and Reverse Priority.

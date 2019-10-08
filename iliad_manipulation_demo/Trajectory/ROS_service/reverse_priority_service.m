@@ -1,5 +1,5 @@
-function response = reverse_priority_test_2(~, reqMsg, response)
-%REVERSE_PRIORITY_TEST_2 testing the service with ROS indigo in docker container
+function response = reverse_priority_service(~, reqMsg, response)
+%REVERSE_PRIORITY_TEST testing the service with ROS indigo in docker container
   % input:
     % `first`:  is the associated service server object.
     % `second`: is the request message object sent by the service client.
@@ -47,19 +47,35 @@ disp(pose)
 if strcmp(ee_name, 'right_hand')
     % update simulink model
     disp('setting RIGHT hand')
+    % convert dual manipulation pose to reverse priority reference system
     pose_right = ee_2_right7link(pose, 'dual_manipulation');
     waypoint = [zeros(6,1); pose_right];
-    waypoints = [waypoints, waypoint];
+    %-----
+    %waypoints = [waypoints, waypoint];
+    manipulation_mov = [manipulation_mov, waypoint];
+    disp('setting Icode value to 3...')
+    set_param('iliad_test/Icode', 'Value', '3');
+    %-----
 elseif strcmp(ee_name, 'left_hand')
     % update simulink model
     disp('setting LEFT hand')
+    % convert dual manipulation pose to reverse priority reference system
     pose_left = ee_2_left7link(pose, 'dual_manipulation');
     waypoint = [pose_left; zeros(6,1)];
-    waypoints = [waypoints, waypoint];
+    %-----
+    %waypoints = [waypoints, waypoint];
+    manipulation_mov = [manipulation_mov, waypoint];
+    disp('setting Icode value to 3...')
+    set_param('iliad_test/Icode', 'Value', '3');
+    %-----
 else % here should be something like full robot
     % homing
     disp('The waypoint list is ended!')
-    manipulation_mov = waypoints;
+    %manipulation_mov = waypoints;
+    %-----
+    waypoint = zeros(12,1);
+    manipulation_mov = [manipulation_mov, waypoint];
+    %-----
     waypoints = [];
     disp('setting Icode value to 3...')
     set_param('iliad_test/Icode', 'Value', '3');

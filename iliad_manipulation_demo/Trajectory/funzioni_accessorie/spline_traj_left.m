@@ -78,10 +78,12 @@ beta_vel = 0.1;
 
 lambda = 0.9;    
 
-kp = 0.8;
-ko = 0.5;                   % orientation error gain
-K = [ones(1,14), kp, ko];  	% error gain vector
-T_b_DH0 = T_b_DH0l;
+% kp = 0.8;
+% ko = 0.5; 
+kp = 0.008;
+ko = 0.005;                   % orientation error gain
+K  = [ones(1,14), kp, ko];    % error gain vector
+T_b_DH0  = T_b_DH0l;
 T_DH7_ee = T_DH7l_eel;
 
 %% whole parameters vector
@@ -113,11 +115,11 @@ xee_max = kuka_jmax(7);    	% max constraint
 xee_min = kuka_jmin(7);    	% min constraint
     
 %% compute using direct kinematics     
-DH_table_num = KUKA_LWR_DHtable(q_0_right);
+DH_table_num  = KUKA_LWR_DHtable(q_0_right);
 [~, Tee_home] = direct_kinematics_DH(DH_table_num);
 
 Tee_home = T_b_DH0 * Tee_home * T_DH7_ee;
-R_home = Tee_home(1:3,1:3);
+R_home = Tee_home(1:3, 1:3);
 
 %% transformations
 %R_off = eul2rotm([0, 0, 0], 'ZYX'); % offset attorno z
@@ -170,10 +172,8 @@ ppy = spline(t_samples, x_data(:,2), t);
 ppz = spline(t_samples, x_data(:,3), t);
 
 for i = 1:t_prova
-       
     traj(:,i) = [ppx(i);ppy(i);ppz(i)];
     x_or_ee_des(:, :, i) = quat2rotm(theta_traj(i,:));
-    
 end
 
  iter_num_1 = t_prova;

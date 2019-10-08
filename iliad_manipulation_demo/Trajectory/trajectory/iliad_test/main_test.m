@@ -12,10 +12,11 @@
 %% initialize variables
 iliad_test_init
 
-%% activate ROS service to execute the manipulation task
+% activate ROS service to execute the manipulation task
 RP_server = rossvcserver('/reverse_priority_service',...
                          'dual_manipulation_shared/ik_service',...
-                         @reverse_priority_test_2); 
+                         @reverse_priority_service); 
+                     
 %% display iliad_test command prompt to interact with the robot
 activate_command
 
