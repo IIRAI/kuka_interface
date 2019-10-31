@@ -1,8 +1,8 @@
 function [right_arm_7_link] = ee_2_right7link(hand_pose_t, reference)
 %EE_2_RIGHT7LINK returns the right_arm_7_link pose for RP position control
 %   INPUT:
-%       - `hand_pose`: nx1 vector containing the position and orientation
-%                      of the soft hand in table reference system
+%       - `hand_pose_t`: nx1 vector containing the position and orientation
+%                        of the soft hand in table reference system
 %
 %       - `reference`: is a string with value 'reverse_priority' or 'dual_manipulation',
 %                      this specifies which reference system the hand uses, since 
@@ -44,7 +44,6 @@ Rot      = eul2rotm(right_arm_7_link(end-2:end)', 'ZYX');
 hand_offset = R_offset * Rot * hand_offset_local;
 
 %% compute position of the right_arm_7_link for each waypoint
-
 i = 1; % transform all the points from the ee to the 7 link
 while i < (length(hand_pose) - 3)
     right_arm_7_link(i:i + 2) = hand_pose(i:i + 2) + hand_offset;
