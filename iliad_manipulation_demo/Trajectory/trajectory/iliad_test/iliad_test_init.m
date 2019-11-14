@@ -47,6 +47,10 @@ default_right = [0.8, 0.1, 0.1, pi/2, 0, 0]';
 pose_left_def  = ee_2_left7link(default_left,   'reverse_priority');
 pose_right_def = ee_2_right7link(default_right, 'reverse_priority');
 
+%% global publishers
+global handPub
+handPub = rospublisher('/right_hand/joint_states','sensor_msgs/JointState');
+
 %% Display next step advice
 disp(' ')
 disp('----------------------------')

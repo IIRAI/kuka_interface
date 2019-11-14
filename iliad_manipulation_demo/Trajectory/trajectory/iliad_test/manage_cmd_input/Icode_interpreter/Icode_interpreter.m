@@ -14,6 +14,10 @@ else
         case '2' % make pre-defined movement based on the object position
             I2;
             set_param('iliad_test/Icode','Value', '2');
+        case '4'
+            close_hand;
+        case '5'
+            open_hand;
         otherwise
             warning('Unexpected Icode, type h for help ¯\_(⊙︿⊙)_/¯ ')
     end
