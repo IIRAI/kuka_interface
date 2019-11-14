@@ -4,6 +4,8 @@ function [manipulation, change_state] = retrieve_mov()
 %                     1, go home
 %                     2, stay idle
 
+% stores the waypoints from (dual manipulation) to be executed
+% in this function the oldest waypoint is returned (to be executed) and deleted
 global manipulation_mov
 
 n_col = size(manipulation_mov, 2);

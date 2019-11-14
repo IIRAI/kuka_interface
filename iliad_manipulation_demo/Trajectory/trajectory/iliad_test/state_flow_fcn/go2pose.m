@@ -41,15 +41,17 @@ else
 end
 
 % OUTPUT: normalize trajectory to `max_output_length`
-if scale_traj
-    Ts      = 0.01;     % [s] sampling time
-    max_vel = 1.5;      % [rad/s] maximum joint speed
-    [qd_left, qd_right] = scale_trajectory(qd_local_left, qd_local_right,...
-                                           Ts, max_vel, max_output_len);
-else
-    qd_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
-    qd_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
-end
+% if scale_traj
+%     Ts      = 0.01;     % [s] sampling time
+%     max_vel = 1.5;      % [rad/s] maximum joint speed
+%     [qd_left, qd_right] = scale_trajectory(qd_local_left, qd_local_right,...
+%                                            Ts, max_vel, max_output_len);
+% else
+%     qd_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
+%     qd_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
+% end
+qd_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
+qd_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
 
 end
 

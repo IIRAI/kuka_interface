@@ -9,7 +9,7 @@ rosinit%('http://192.168.0.150:11311')
 %% Simulink parameters
 
 global pose_left_def pose_right_def
-global manipulation_mov
+global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
 manipulation_mov = [];
 
 % table of number of samples for the desired trajectory

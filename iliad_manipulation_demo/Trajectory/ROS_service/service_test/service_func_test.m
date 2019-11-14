@@ -20,6 +20,11 @@ disp(' ')
 disp('This is some of the content of the message:')
 reqMsg.Command
 reqMsg.EeName
+disp('EePose')
+reqMsg.EePose
+disp('Waypoint')
+reqMsg.Waypoints.Position
+reqMsg.Waypoints.Orientation
 disp(' ')
 
 response.Ack = true;

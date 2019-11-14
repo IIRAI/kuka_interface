@@ -5,9 +5,11 @@
 %  - The right arm is the upper one, which is equipped with the soft-hand.
 
 %% launch the simulation in rviz
-% use the following command to launch the visualization.
+% use the following command to launch the visualization and use only matlab.
 
 %   roslaunch vito_description view_iliad.launch
+
+% To launch dual manipulation check its documentation.
 
 %% initialize variables
 iliad_test_init

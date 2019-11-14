@@ -6,7 +6,7 @@
 %   `rosrun dual_manipulation_state_manager test_matlab_ros_service`
 
 % initialize matlab-ros master node
-%rosinit
+% rosinit
 % define the server, input: server name, server type, service functin
 RP_server = rossvcserver('/reverse_priority_service',...
                          'dual_manipulation_shared/ik_service',...
