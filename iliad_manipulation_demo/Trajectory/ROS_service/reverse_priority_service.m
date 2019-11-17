@@ -20,20 +20,28 @@ disp('########################################################################')
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 
 % retrieve message informations
-ee_name   = reqMsg.EeName;
-waypoints = reqMsg.Waypoints;
+command   = reqMsg.Command
+ee_name   = reqMsg.EeName
+waypoints = reqMsg.Waypoints
 
-for t = 1 : length(waypoints) % size(waypoints, 1)
-    waypoint_position    = waypoints(t).Position;
-    waypoint_orientation = waypoints(t).Orientation;
-    pose_global = [waypoint_position.X;
-                   waypoint_position.Y;
-                   waypoint_position.Z;
-                   waypoint_orientation.Z;
-                   waypoint_orientation.Y;
-                   waypoint_orientation.X];
-    arm_waypoint(ee_name, pose_global);
+if strcmp(command, 'home')
+    disp('going home...')
+    set_param('iliad_test/Icode','Value', '0');
+    open_hand;
+else
+    for t = 1 : length(waypoints) % size(waypoints, 1)
+        waypoint_position    = waypoints(t).Position;
+        waypoint_orientation = waypoints(t).Orientation;
+        pose_global = [waypoint_position.X;
+                       waypoint_position.Y;
+                       waypoint_position.Z;
+                       waypoint_orientation.Z;
+                       waypoint_orientation.Y;
+                       waypoint_orientation.X];
+        arm_waypoint(ee_name, pose_global);
+    end
 end
+
 disp(' ')
 
 response.Ack = true;

@@ -8,6 +8,7 @@ else
     switch cmd(2)
         case '0' % homing
             set_param('iliad_test/Icode','Value', '0');
+            open_hand;
         case '1' % go to position
             I1;
             set_param('iliad_test/Icode','Value', '1');

@@ -39,7 +39,7 @@ disp(pose)
 disp('of the end effector')
 disp(ee_name)
 
-if strcmp(ee_name, 'right_hand')
+if strcmp(ee_name, 'right_hand') || strcmp(ee_name, 'closed_hand') || strcmp(ee_name, 'opened_hand')
     % update simulink model
     disp('setting RIGHT hand')
     % convert dual manipulation pose to reverse priority reference system
