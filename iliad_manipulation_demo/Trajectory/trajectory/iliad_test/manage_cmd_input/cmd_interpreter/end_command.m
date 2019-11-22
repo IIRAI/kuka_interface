@@ -8,8 +8,9 @@ global pose_left_def pose_right_def
 ask_command = 0;
 
 %% reset to default value
-set_param('iliad_test/enable','Value', '0');
+set_param('iliad_test/enable', 'Value', '0');
 set_param('iliad_test/Icode',  'Value', '0');
+set_param('iliad_test/hand_synergy', 'Value', '0');  % open hand
 set_param('iliad_test/pose_left', 'Value',...
           sprintf('[%f;%f;%f;%f;%f;%f]', pose_left_def(1),pose_left_def(2),...
                                          pose_left_def(3),pose_left_def(4),...

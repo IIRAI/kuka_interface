@@ -20,9 +20,9 @@ disp('########################################################################')
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 
 % retrieve message informations
-command   = reqMsg.Command
-ee_name   = reqMsg.EeName
-waypoints = reqMsg.Waypoints
+command   = reqMsg.Command;
+ee_name   = reqMsg.EeName;
+waypoints = reqMsg.Waypoints;
 
 if strcmp(command, 'home')
     disp('going home...')
