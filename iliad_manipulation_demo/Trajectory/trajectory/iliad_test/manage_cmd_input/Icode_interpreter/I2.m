@@ -5,11 +5,12 @@
 % evaluates the end-effectors pose based on the object pose (given as
 % input).
 
+global sim_name
 
 %% object position
-obj_pose = input('iliad_test command: $ object position [table ref]: ');
+obj_pose = input(sim_name + ' command: $ object position [table ref]: ');
 
 % update left position
-set_param('iliad_test/object_pose', 'Value',...
+set_param(sim_name + '/object_pose', 'Value',...
           sprintf('[%f;%f;%f]', obj_pose(1),obj_pose(2),obj_pose(3))...
          );

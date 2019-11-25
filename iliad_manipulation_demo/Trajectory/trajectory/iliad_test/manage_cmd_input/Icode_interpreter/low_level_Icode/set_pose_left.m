@@ -22,23 +22,25 @@ function set_pose_left(left, reference)
 %   manipulation project adopted a different reference system for the hand
 %   and a different [0, 0, 0] orientation.
 
+global sim_name
+
 if ~isempty(left) % input position if empty maintain position
     if isnan(left(1))       % change just the orientation
-        left_current_7link = str2num(get_param('iliad_test/pose_left', 'Value')); % position of the 7 link in in global ref
+        left_current_7link = str2num(get_param(sim_name + '/pose_left', 'Value')); % position of the 7 link in in global ref
         left_current_ee    = left7link_2_ee(left_current_7link);                  % convert in ee position in table position
         left = [left_current_ee(1:3); left(2:4)];
     elseif isnan(left(4))   % change just the position
-        left_current_7link = str2num(get_param('iliad_test/pose_left', 'Value')); % position of the 7 link in in global ref but here is useless
+        left_current_7link = str2num(get_param(sim_name + '/pose_left', 'Value')); % position of the 7 link in in global ref but here is useless
         left = [left(1:3); left_current_7link(4:6)];
     end   
 else
-    left = str2num(get_param('iliad_test/pose_left', 'Value'));   % position of the 7 link in in global ref
+    left = str2num(get_param(sim_name + '/pose_left', 'Value'));   % position of the 7 link in in global ref
 end
 
 % the RP control the 7 link pose, let's obtain it from the ee pose
 left = ee_2_left7link(left, reference);
 % update left position
-set_param('iliad_test/pose_left', 'Value',...
+set_param(sim_name + '/pose_left', 'Value',...
           sprintf('[%f;%f;%f;%f;%f;%f]', left(1),left(2),left(3),...
                                          left(4),left(5),left(6))...
          );

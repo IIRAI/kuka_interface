@@ -19,6 +19,8 @@ function response = reverse_priority_service(~, reqMsg, response)
 disp('########################################################################')
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 
+global sim_name
+
 % retrieve message informations
 command   = reqMsg.Command;
 ee_name   = reqMsg.EeName;
@@ -26,7 +28,7 @@ waypoints = reqMsg.Waypoints;
 
 if strcmp(command, 'home')
     disp('going home...')
-    set_param('iliad_test/Icode','Value', '0');
+    set_param(sim_name + '/Icode','Value', '0');
     open_hand;
 else
     for t = 1 : length(waypoints) % size(waypoints, 1)

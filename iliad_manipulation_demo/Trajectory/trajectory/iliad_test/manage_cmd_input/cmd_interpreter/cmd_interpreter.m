@@ -2,13 +2,15 @@
 
 % Remark: all the admissible commands must be written in lower case!
 
+global sim_name
+
 switch cmd
     case 'h'         % print help
         display_help;
     case 'enable'    % turn on the arms
-        set_param('iliad_test/enable','Value', '1');
+        set_param(sim_name + '/enable','Value', '1');
     case 'disable'   % turn off the arms
-        set_param('iliad_test/enable','Value', '0');
+        set_param(sim_name + '/enable','Value', '0');
     case 'end'          
         end_command; % exit the loop and set the default value for iliad_test
     otherwise         

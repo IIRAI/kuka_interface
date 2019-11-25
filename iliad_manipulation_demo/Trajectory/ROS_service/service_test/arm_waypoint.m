@@ -7,6 +7,8 @@ function arm_waypoint(ee_name, pose_global)
 %                       [x, y, z]: waypoint position
 %                       [Z, Y, Z]: waypoint orientation
 
+global sim_name
+
 persistent old_right old_left
 if isempty(old_right)
     old_right = zeros(6,1);
@@ -37,15 +39,15 @@ disp(ee_name)
 
 if strcmp(ee_name, 'right_hand')
     set_right_arm(pose);
-    set_param('iliad_test/hand_synergy', 'Value', '0');  % open hand
+    set_param(sim_name + '/hand_synergy', 'Value', '0');  % open hand
 elseif strcmp(ee_name, 'left_hand')
     set_left_arm(pose);
 elseif strcmp(ee_name, 'closed_hand')
     set_right_arm(pose);
-    set_param('iliad_test/hand_synergy', 'Value', '1');  % close hand
+    set_param(sim_name + '/hand_synergy', 'Value', '1');  % close hand
 elseif strcmp(ee_name, 'opened_hand')
     set_right_arm(pose);
-    set_param('iliad_test/hand_synergy', 'Value', '0');  % open hand
+    set_param(sim_name + '/hand_synergy', 'Value', '0');  % open hand
 else % here should be something like full robot
     % homing
 %     disp(ee_name)
@@ -55,7 +57,7 @@ else % here should be something like full robot
 end
 
 disp('setting Icode value to 3...')
-set_param('iliad_test/Icode', 'Value', '3');
+set_param(sim_name + '/Icode', 'Value', '3');
 
 end
 

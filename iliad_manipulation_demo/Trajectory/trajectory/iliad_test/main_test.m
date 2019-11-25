@@ -12,6 +12,9 @@
 % To launch dual manipulation check its documentation.
 
 %% initialize variables
+global sim_name;
+sim_name = "iliad_test"; % specify which sim to use
+
 iliad_test_init
 
 % activate ROS service to execute the manipulation task

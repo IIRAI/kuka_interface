@@ -18,6 +18,8 @@
 %            `pose_right_def`
 %      they are defined in the `init` script of the `iliad_test`.
 
+global sim_name
+
 %% left arm position
 left = input('iliad_test command: $ left pose [idle]: ');
 left = reshape(left, length(left), 1); % make sure it is a column
@@ -25,7 +27,7 @@ left = reshape(left, length(left), 1); % make sure it is a column
 set_pose_left(left, 'reverse_priority')
 
 %% right arm position (do the same as the left arm!)
-right = input('iliad_test command: $ right pose [idle]: ');
+right = input(sim_name + ' command: $ right pose [idle]: ');
 right = reshape(right, length(right), 1); % make sure it is a column
 % update simulink model
 set_pose_right(right, 'reverse_priority')

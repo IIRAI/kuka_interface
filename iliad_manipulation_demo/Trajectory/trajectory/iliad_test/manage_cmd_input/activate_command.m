@@ -10,10 +10,10 @@ ask_command = 1;
 
 while ask_command
     
-    cmd = input('iliad_test command: $ ', 's'); % wait for command
+    cmd = input(sim_name + ' command: $ ', 's'); % wait for command
     
     if isempty(cmd) % disable
-        set_param('iliad_test/enable','Value', '0');
+        set_param(sim_name + '/enable','Value', '0');
         warning('An empty input is interpreted as a `disable` command')
         disp('type h for help (◠﹏◠)')
     else

@@ -8,6 +8,7 @@ rosinit%('http://192.168.0.150:11311')
 
 %% Simulink parameters
 
+%global sim_name
 global pose_left_def pose_right_def
 global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
 manipulation_mov = [];
@@ -54,5 +55,5 @@ handPub = rospublisher('/right_hand/joint_states','sensor_msgs/JointState');
 %% Display next step advice
 disp(' ')
 disp('----------------------------')
-disp('---> RUN iliad_test.slx <---')
+disp('---> RUN ' + sim_name + '.slx <---')
 disp('----------------------------')
