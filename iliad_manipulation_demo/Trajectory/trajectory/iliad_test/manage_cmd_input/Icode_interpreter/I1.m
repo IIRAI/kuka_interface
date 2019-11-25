@@ -21,7 +21,7 @@
 global sim_name
 
 %% left arm position
-left = input('iliad_test command: $ left pose [idle]: ');
+left = input(sim_name + ' command: $ left pose [idle]: ');
 left = reshape(left, length(left), 1); % make sure it is a column
 % update simulink model
 set_pose_left(left, 'reverse_priority')

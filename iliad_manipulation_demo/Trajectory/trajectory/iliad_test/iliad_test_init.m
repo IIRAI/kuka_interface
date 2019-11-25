@@ -52,6 +52,11 @@ pose_right_def = ee_2_right7link(default_right, 'reverse_priority');
 global handPub
 handPub = rospublisher('/right_hand/joint_states','sensor_msgs/JointState');
 
+%% activate ROS service to execute the manipulation task
+RP_server = rossvcserver('/reverse_priority_service',...
+                         'dual_manipulation_shared/ik_service',...
+                         @reverse_priority_service); 
+
 %% Display next step advice
 disp(' ')
 disp('----------------------------')
