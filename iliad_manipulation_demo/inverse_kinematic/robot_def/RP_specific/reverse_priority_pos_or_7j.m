@@ -19,8 +19,8 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
     disp('Reverse priority algorithm initialization');
 
     % initialization (i.e. k = 1)
-    q(:,1) = q_0;
-  	qd(:,1) = qd_0;            
+    q(:,1)  = q_0;
+  	qd(:,1) = qd_0;
 
     % ---------------------------------------------------------------------
     % specific part
@@ -64,8 +64,8 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
             q7 = q(7, k-1);
 
             % numeric jacobian
-            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]);  
-            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);   
+            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
             x{16,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
@@ -73,15 +73,15 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
 
             x{13,k} = q1;
             x{14,k} = q1;
-            x{1,k} = q7;
-            x{2,k} = q7;
-            x{3,k} = q6;
-            x{4,k} = q6;
-            x{5,k} = q5;
-            x{6,k} = q5;
-            x{7,k} = q4;
-            x{8,k} = q4;
-            x{9,k} = q3;
+            x{1,k}  = q7;
+            x{2,k}  = q7;
+            x{3,k}  = q6;
+            x{4,k}  = q6;
+            x{5,k}  = q5;
+            x{6,k}  = q5;
+            x{7,k}  = q4;
+            x{8,k}  = q4;
+            x{9,k}  = q3;
             x{10,k} = q3;
             x{11,k} = q2;
             x{12,k} = q2;
@@ -90,7 +90,7 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
         
         x_cur = x(:,k);                     % x: cell array 
         
-        x_des_cur = x_des(:,k);         
+        x_des_cur = x_des(:,k);
         x_des_prev = x_des(:,k-1); 
         
         qd_prev = qd(:,k-1);
@@ -146,7 +146,7 @@ function [q, qd, e] = reverse_priority_pos_or_7j(N, Ts, iter_num, J_and_T_hand, 
         
         % append to vectors
         qd = [qd, qd_new];
-        e = [e, e_new];              
+        e  = [e, e_new];
         
         % append new q, given by integration
         q = [q, q(:,k-1) + qd_new*Ts];

@@ -1,15 +1,13 @@
-function q_out = spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot, t_rot)
-
-% t_prova = number of samples of the trajectory.
-% q_0_right= iniital position
-% wp2_pos = list of waypoints coordinates
-% wp_rot = desired attitude in home ee frame
-% this function creates a joint position trajectory starting from q_0_right.
-% the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
-% generate_line_trajectory between the first attitude (corresponding to the
-% ee orientation when the robot is in q_0_right) and the attitude described
-% by wp_rot
-%
+function q_out = table_spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot, t_rot)
+%TABLE_SPLINE_TRAJ_RIGHT returns the joint trajectory considering the table obstable
+%   this function creates a joint position trajectory starting from q_0_right.
+%   the cartesian trajectory passes by all positions in wp_pos. The cartesian attitude is a
+%   generate_line_trajectory between the first attitude (corresponding to the
+%   ee orientation when the robot is in q_0_right) and the attitude described
+%   by wp_rot.
+%   This function consider also the presence of the table as an 
+%   obstacle.
+% 
 %   INPUT:
 %       t_prova = number of samples of the trajectory.
 %       q_0_right= iniital position
@@ -21,7 +19,7 @@ wp_num = length(wp2_pos)/3;
 t_samples = 0 : wp_num;
 step = t_samples(end)/t_prova;
 t = 0 : step : (wp_num-step);
-                
+
 %%
 q_0_right = zeros(1,7);
 for i = 1 : 7
@@ -73,7 +71,7 @@ qd_0 = zeros(7, 1);
         
 
 %% parameters for reverse priority algorithm
-N = 16;
+N = 17;  % number of task: 14 max/min joints, 1 table constraint, 2 position + orientation tasks
 Ts = 0.1;
 DPI_lambda_max = 0.1*10^4; 	% damping for pinv
 DPI_epsilon = 0.1;          % bound for pinv
@@ -87,7 +85,7 @@ lambda = 0.9;
 % ko = 0.5; 
 kp = 0.008;
 ko = 0.005;                   % orientation error gain
-K = [ones(1,14), kp, ko];  	% error gain vector
+K = [ones(1,15), kp, ko];  	% error gain vector
 T_b_DH0 = T_b_DH0r;
 T_DH7_ee = T_DH7r_eer;
 
@@ -153,6 +151,10 @@ theta_traj = [generate_slerp(q0, q1, t_rot(1))];
 k = 2;
 disp('Right');
 
+%% Task of the final configuration of the arm ----------------------------------
+table_ee = 0.8; %% TODO(ed): write a proper value, testing...
+%% -----------------------------------------------------------------------------
+
 for j = 1:num_wp_rot-1
     R_1 = R_pre*eul2rotm(ZYX(k,:))*R2;
     q1 = [q1; rotm2quat((R_1))];
@@ -186,27 +188,32 @@ end
             x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max;...
                           xj6_min; xj5_max; xj5_min; xj4_max; xj4_min;...
                           xj3_max; xj3_min; xj2_max; xj2_min;...
+                          table_ee;...
                           traj(:,k); x_or_ee_des(:,:,k)};
         end        
         
         % variables for RP algorithm
     
     % flag showing if p is a task or a constraint  
-    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 0];
+    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % max/min joints
+                   2,...   % table constraint
+                   0, 0];  % trajectory and orientation task
     
     % constraint value (NaN when not present)
-    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...
-              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...
-              xj2_max, xj2_min, NaN, NaN];
+    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...  % max/min joints
+              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...  % max/min joints
+              xj2_max, xj2_min,...                                      % max/min joints
+              table_ee,...  % table constraint
+              NaN, NaN];    % trajectory and orientation task
 disp('Here');
 %% algorithm
 
 % define function handles of J and T for the fast version
 J_and_T_hand = def_JT_handle(robot_ID);
 
-% execute algorithm
-[q_out, ~, ~] = reverse_priority_pos_or_7j(N, Ts, iter_num_1, ...
-                                           J_and_T_hand, ...
-                                           q_0_right, qd_0, x_des, ...
-                                           unil_constr, ...
-                                           x_cons, param_vect);
+% execute algorithm considering the table constraint
+[q_out, ~, ~] = reverse_priority_table(N, Ts, iter_num_1, ...
+                                       J_and_T_hand, ...
+                                       q_0_right, qd_0, x_des, ...
+                                       unil_constr, ...
+                                       x_cons, param_vect);

@@ -1,28 +1,25 @@
-function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0, qd_0, x_des, unil_constr, x_cons, param_vect)
-%REVERSE_PRIORITY_2HOME is a modification of `reverse_priority_pos_or_7j`
+function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0, qd_0, x_des, unil_constr, x_cons, param_vect)
 %{
 ===========================================================================
-	Exactly as the general reverse_priority.m, but enhanced in performance.
+    Exactly as the general reverse_priority.m, but enhanced in performance.
     On the other hand, this can be used only when all the following tasks 
     are present:
 
     - all 7 joints limits constraints
     - position task
     - orientation task
-    - desired final joint pose
 
     J_and_T_hand is a new input containing the function handles for J and
     T.
     For further informations, see reverse_priority.m
 ===========================================================================
 %}
-
     % user message
-    disp('Reverse priority algorithm initialization');
+    disp('Reverse priority algorithm w/ table constraint initialization');
 
     % initialization (i.e. k = 1)
-    q(:,1) = q_0;
-  	qd(:,1) = qd_0;
+    q(:,1)  = q_0;
+    qd(:,1) = qd_0;
 
     % ---------------------------------------------------------------------
     % specific part
@@ -40,23 +37,14 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     J{11} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 3 max unilateral constraint
     J{12} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 3 min unilateral constraint 
     J{13} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 max unilateral constraint
-    J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint  
-    
-    % configuration space position task
-    J{17} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
-    J{18} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
-    J{19} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
-    J{20} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
-    J{21} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
-    J{22} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
-    J{23} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
+    J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint   
         
     % (qdMAX) error init for variable gain 
-    e = cell(23,1);              	
-    e{15,1} = (x_des{15,1} - J_and_T_hand{3}(q_0)); 
+    e = cell(N,1);
+    e{16,1} = (x_des{16,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
-        
+   
     for k = 2 : iter_num
         
         % user message
@@ -74,15 +62,23 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
             q6 = q(6, k-1);
             q7 = q(7, k-1);
 
+            % numeric jacobian for table constraint, on x axis (testing...) -> first row
+            J15 = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
+            J{15} = J15(3,:);
+            % actual x for table constraint
+            T15 = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
+            x{15,k} = T15(3,:);
+
             % numeric jacobian
-            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
-            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{17} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{16} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
-            x{16,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
-            x{15,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            x{17,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
+            x{16,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
 
-            % max/min joint limit
+            x{13,k} = q1;
+            x{14,k} = q1;
             x{1,k}  = q7;
             x{2,k}  = q7;
             x{3,k}  = q6;
@@ -95,23 +91,12 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
             x{10,k} = q3;
             x{11,k} = q2;
             x{12,k} = q2;
-            x{13,k} = q1;
-            x{14,k} = q1;
-
-            % task to achieve desired joint configuration (home desired configuration)
-            x{17,k} = q1; 
-            x{18,k} = q2;
-            x{19,k} = q3; 
-            x{20,k} = q4;
-            x{21,k} = q5; 
-            x{22,k} = q6;
-            x{23,k} = q7;
-
+            
         % -----------------------------------------------------------------
         
         x_cur = x(:,k);                     % x: cell array 
         
-        x_des_cur = x_des(:,k);         
+        x_des_cur = x_des(:,k);
         x_des_prev = x_des(:,k-1); 
         
         qd_prev = qd(:,k-1);
@@ -126,7 +111,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         for p = N:-1:1
             
             % if x_des is a matrix (R), xd_des_cur will be an ang. vel. w:
-         	if size(x_des_cur{p}) == [3,3]      % it's a matrix (R)
+             if size(x_des_cur{p}) == [3,3]      % it's a matrix (R)
                 if x_des_cur{p} == zeros(3)     % const R
                     xd_des_cur{p} = [0; 0; 0];  % angular velocity is 0
                 else 
@@ -146,7 +131,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         
             % (qdMAX) scale gain by position error
             param_vect2 = param_vect;
-            if norm(e{15,k-1},2) < 0.01
+            if norm(e{16,k-1},2) < 0.01
                 param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
             end
             
@@ -160,14 +145,14 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
                                                 xd_des_cur, unil_constr, ...
                                                 x_cons_cur, param_vect2, ...
                                                 J, x_cur);
-
+        
         toc
         % user message
 %         disp('... done');
         
         % append to vectors
         qd = [qd, qd_new];
-        e = [e, e_new];              
+        e  = [e, e_new];
         
         % append new q, given by integration
         q = [q, q(:,k-1) + qd_new*Ts];

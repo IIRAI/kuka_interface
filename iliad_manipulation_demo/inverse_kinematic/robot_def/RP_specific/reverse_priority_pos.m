@@ -17,8 +17,8 @@ function [q, qd, e] = reverse_priority_pos(N, Ts, iter_num, J_and_T_hand, q_0, q
     disp('Reverse priority algorithm initialization');
 
     % initialization (i.e. k = 1)
-    q(:,1) = q_0;
-  	qd(:,1) = qd_0;            
+    q(:,1)  = q_0;
+  	qd(:,1) = qd_0;
 
     % ---------------------------------------------------------------------
     % specific part 
@@ -48,17 +48,17 @@ function [q, qd, e] = reverse_priority_pos(N, Ts, iter_num, J_and_T_hand, q_0, q
             q7 = q(7, k-1);
 
             % numeric jacobian
-            J{1} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);   
+            J{1} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
 
             % actual x
-            x{1,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            x{1,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
             
         % -----------------------------------------------------------------
         
-        x_cur = x(:,k);                     % x: cell array 
+        x_cur = x(:,k);     % x: cell array 
         
-        x_des_cur = x_des(:,k);         
-        x_des_prev = x_des(:,k-1); 
+        x_des_cur = x_des(:,k);
+        x_des_prev = x_des(:,k-1
         
         qd_prev = qd(:,k-1);
               

@@ -1,7 +1,7 @@
-function q_out = home_spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot,t_rot)
+function q_out = home_spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot, t_rot)
 %HOME_SPLINE_TRAJ_RIGHT returns the joint trajectory for homing
 %   this function creates a joint position trajectory starting from q_0_right.
-%   the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
+%   the cartesian trajectory passes by all positions in wp_pos. The cartesian attitude is a
 %   generate_line_trajectory between the first attitude (corresponding to the
 %   ee orientation when the robot is in q_0_right) and the attitude described
 %   by wp_rot
@@ -160,12 +160,12 @@ disp('Right');
 q_home_right = [-0.0000, -1.9509, -0.0000, -1.8703, -0.0000, -0.6711, 0.0000];
 qhr = q_home_right;
 
-%% 
+%%
 
 x_home_row = Tee_home(1:3,4)';
 
 x_data = x_home_row;
-i=1;
+i = 1;
 for j = 1:wp_num
     x_data = [x_data;wp2_pos(i:i+2)'];
     i = i+3;
@@ -183,28 +183,28 @@ for i = 1:t_prova
         
 end
 
- iter_num_1 = t_prova;
-        
-        x_des = cell(N, iter_num_1);  % init for speed
-        for k = 1 : iter_num_1
-            x_des(:,k) = {  xee_max; xee_min; xj7_max; xj7_min; xj6_max; ...
-                            xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ...
-                            xj3_max; xj3_min; xj2_max; xj2_min; ...
-                            traj(:,k); x_or_ee_des(:,:,k);...
-                            qhr(1); qhr(2); qhr(3); qhr(4); qhr(5); qhr(6); qhr(7)};
-        end        
-        
-        % variables for RP algorithm
-    
-    % flag showing if p is a task or a constraint  
-    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 0,...
-                   0, 0, 0, 0, 0, 0, 0];
-    
-    % constraint value (NaN when not present)
-    x_cons = [  xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min, ...
-                xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min, ...
-                xj2_max, xj2_min, NaN, NaN,...
-                NaN, NaN, NaN, NaN, NaN, NaN, NaN];
+iter_num_1 = t_prova;
+
+x_des = cell(N, iter_num_1);  % init for speed
+for k = 1 : iter_num_1
+    x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max; ...
+                  xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ...
+                  xj3_max; xj3_min; xj2_max; xj2_min; ...
+                  traj(:,k); x_or_ee_des(:,:,k);...
+                  qhr(1); qhr(2); qhr(3); qhr(4); qhr(5); qhr(6); qhr(7)};
+end        
+
+% variables for RP algorithm
+
+% flag showing if p is a task or a constraint  
+unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 0,...
+               0, 0, 0, 0, 0, 0, 0];
+
+% constraint value (NaN when not present)
+x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min, ...
+          xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min, ...
+          xj2_max, xj2_min, NaN, NaN,...
+          NaN, NaN, NaN, NaN, NaN, NaN, NaN];
 
 %% algorithm
 % define function handles of J and T for the fast version
