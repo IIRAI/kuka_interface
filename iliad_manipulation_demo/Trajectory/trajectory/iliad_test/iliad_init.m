@@ -1,4 +1,4 @@
-%ILIAD_TEST_INIT initializes the iliad_test variables and ROS environment
+%%ILIAD_INIT initializes the iliad_test variables and ROS environment
 % Remarks:
 %  - The left arm is the lower one, which is equipped with the velvet-tray.
 %  - The right arm is the upper one, which is equipped with the soft-hand.

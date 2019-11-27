@@ -21,6 +21,12 @@ else
             close_hand;
         case '5'
             open_hand;
+        case '6' %% TODO(ed): delete I4/I5 in favor to I6/I7
+            hand_syn = input(sim_name + ' command: $ hand synergy (0=open / 1=losed): ');
+            set_param(sim_name + '/hand_synergy', 'Value', sprintf('%f', hand_syn));
+        case '7'
+            velvet_ctrl = input(sim_name + ' command: $ velvet control (0=open / 1=losed): ');
+            set_param(sim_name + '/velvet_ctrl', 'Value', sprintf('%f', velvet_ctrl));
         otherwise
             warning('Unexpected Icode, type h for help ¯\_(⊙︿⊙)_/¯ ')
     end
