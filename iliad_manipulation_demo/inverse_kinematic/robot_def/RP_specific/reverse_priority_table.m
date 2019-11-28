@@ -21,6 +21,11 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
     q(:,1)  = q_0;
     qd(:,1) = qd_0;
 
+    % save in a local variable the table contraint since it can change during planning
+    cons_table_x = x_cons(15);
+    cons_table_z = x_cons(16);
+
+
     % ---------------------------------------------------------------------
     % specific part
     
@@ -41,19 +46,13 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
         
     % (qdMAX) error init for variable gain 
     e = cell(N,1);
-    e{16,1} = (x_des{16,1} - J_and_T_hand{3}(q_0)); 
+    e{17,1} = (x_des{17,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
    
     for k = 2 : iter_num
-        
-        % user message
-%         disp(strcat('step #', num2str(k)));
-%         disp('... init');
-        
         % -----------------------------------------------------------------
-        % specific part        
-        
+        % specific part
             q1 = q(1, k-1);
             q2 = q(2, k-1);
             q3 = q(3, k-1);
@@ -62,20 +61,35 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
             q6 = q(6, k-1);
             q7 = q(7, k-1);
 
-            % numeric jacobian for table constraint, on x axis (testing...) -> first row
-            J15 = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
-            J{15} = J15(3,:);
-            % actual x for table constraint
-            T15 = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
-            x{15,k} = T15(3,:);
+            % numeric jacobian for table constraint, on z axis --> 3rd row
+            Jee_table = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
+            J{15} = Jee_table(1,:);
+            J{16} = Jee_table(3,:);
+            % actual x for table constraint --> position on z axis
+            Tee_table = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
+            x{15,k} = Tee_table(1,:);
+            x{16,k} = Tee_table(3,:);
+
+            % check the position of the ee in the x and z axis and activate 
+            % or deactivate the table constraint accordingly
+            if x{15,k} < cons_table_x  % x less than table, deactivate z constraint
+                x_cons(16) = 0;
+            else
+                x_cons(16) = cons_table_z;
+            end
+            if x{16,k} > cons_table_z  % z more than table, deactivate x constraint
+                x_cons(15) = 10000;
+            else
+                x_cons(15) = cons_table_x;
+            end
 
             % numeric jacobian
-            J{17} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
-            J{16} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{18} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{17} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
-            x{17,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
-            x{16,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            x{18,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
+            x{17,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
 
             x{13,k} = q1;
             x{14,k} = q1;
@@ -131,7 +145,7 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
         
             % (qdMAX) scale gain by position error
             param_vect2 = param_vect;
-            if norm(e{16,k-1},2) < 0.01
+            if norm(e{17,k-1},2) < 0.01
                 param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
             end
             

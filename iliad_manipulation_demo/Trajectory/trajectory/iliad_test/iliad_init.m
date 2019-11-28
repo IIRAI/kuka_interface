@@ -39,6 +39,8 @@ q_right_init = [0.1, 0.1, 0.1, 0, 0, -1,    0]';
 % width  = 0.8 [m]                       |Y                |
 % height = 0.7 [m]                       |    X            |
 %                                        +----->___________|
+% the position of the table reference system in <world> frame is:
+% [1.3500; 1.2010; 0.7000]
 
 % deafault end_effectors position in table reference system
 default_left  = [0.0, 0.1, 0.1, pi/2, 0, 0]';
