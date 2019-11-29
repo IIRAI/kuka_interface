@@ -40,6 +40,7 @@ else
                        waypoint_orientation.Z;
                        waypoint_orientation.Y;
                        waypoint_orientation.X];
+        % manage received waypoint
         arm_waypoint(ee_name, pose_global);
     end
 end

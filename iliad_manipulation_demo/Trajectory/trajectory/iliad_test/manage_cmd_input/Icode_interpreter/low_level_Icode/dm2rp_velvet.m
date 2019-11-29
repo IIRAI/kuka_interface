@@ -10,25 +10,27 @@ function rp_angle = dm2rp_velvet(dm_angle)
 % ZYX angle in dual manipulation
 dmZ = dm_angle(1);
 dmY = dm_angle(2);
-if dmY <= 0.01 && dmY >= -0.01
-    dmY = 0;
-end
 dmX = dm_angle(3);
 
-% evaluate ZX in reverse priority
-tan_rpZ = sin(dmX) / tan(dmY);
-sin_rpX = - cos(dmZ) * cos(dmY);
+% evaluate ZY in reverse priority
 
-rpZ = atan(tan_rpZ);
-rpX = asin(sin_rpX);
+sin_rpY = -(cos(dmZ) * sin(dmX) * sin(dmY)) - (cos(dmX) * sin(dmZ));
 
-% evaluate Y
-cos_rpY = ((sin(dmZ) * sin(dmX)) + (cos(dmZ) * cos(dmX) * sin(dmY))) / cos(rpX);
+yX = - (cos(dmY) * cos(dmZ));
+xX = ((cos(dmZ) * cos(dmX) * sin(dmY)) + (sin(dmX) * sin(dmZ)));
 
-rpY = acos(cos_rpY);
+yZ = sin(dmX) * cos(dmY);
+xZ = (sin(dmZ) * sin(dmX) * sin(dmY)) + (cos(dmX) * cos(dmZ));
 
-% set up the output
-rp_angle = [rpZ; rpY; rpX];
+rpY = asin(sin_rpY);
+rpX = atan2(yX, xX);
+rpZ = atan2(yZ, xZ);
 
+if rpX < -1.57
+    rpX = -1.57;
 end
 
+% set up the output
+rp_angle = [rpZ - pi; rpY; rpX];
+
+end
