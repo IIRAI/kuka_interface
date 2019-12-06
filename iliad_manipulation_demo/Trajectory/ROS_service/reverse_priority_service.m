@@ -30,6 +30,14 @@ if strcmp(command, 'home')
     disp('going home...')
     set_param(sim_name + '/Icode','Value', '0');
     open_hand;
+elseif strcmp(ee_name, 'full_robot')
+    disp('# of wps in `full_robot`: ')
+    disp(length(waypoints))
+    if length(waypoints) <= 3
+        set_arms(waypoints(end-1:end));
+    else
+        set_arms(waypoints(2:3));
+    end
 else
     for t = 1 : length(waypoints) % size(waypoints, 1)
         waypoint_position    = waypoints(t).Position;

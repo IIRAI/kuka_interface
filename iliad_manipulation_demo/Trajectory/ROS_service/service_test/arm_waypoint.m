@@ -8,6 +8,7 @@ function arm_waypoint(ee_name, pose_global)
 %                       [Z, Y, Z]: waypoint orientation
 
 global sim_name
+global manipulation_mov
 
 persistent old_right old_left
 if isempty(old_right)
