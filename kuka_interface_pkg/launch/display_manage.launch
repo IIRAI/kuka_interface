@@ -1,0 +1,15 @@
+<launch>
+
+<!-- choose whether or not to start the full robot simulation -->
+<arg name="use_robot_sim" default="true"/>
+
+<!-- launch robot simulation w/ or w/out gazebo -->
+<include file="$(find vito_description)/launch/display.launch">
+    <arg name="use_rviz" value="false"/>
+    <arg name="use_robot_sim" value="$(arg use_robot_sim)"/>
+</include>
+
+<!-- launch manager to send commands to the robot -->
+<include file="$(find kuka_interface_pkg)/launch/manager.launch"/>
+
+</launch>
