@@ -26,8 +26,8 @@ rpY = asin(sin_rpY);
 rpX = atan2(yX, xX);
 rpZ = atan2(yZ, xZ);
 
-if rpX < -1.57
-    rpX = -1.57;
+if rpX < -1.10  % limite poco più di 120° 
+    rpX = -1.10;
 end
 
 % set up the output
