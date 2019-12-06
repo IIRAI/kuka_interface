@@ -13,6 +13,9 @@ global pose_left_def pose_right_def
 global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
 manipulation_mov = [];
 
+global table_rs  % position of the reference system of the table in <world> frame
+table_rs = [1.3500; 1.2010; 0.7000];
+
 % table of number of samples for the desired trajectory
 t_prova = [300,300;...
            300,300;...
@@ -24,7 +27,7 @@ t_prova = [300,300;...
 max_output_len = 4000;
 
 % threshold to consider a movement complete
-pos_threshold = 0.1;
+pos_threshold = 0.01;
 
 %% Initial configuration
 % avoid starting from singular position when using rviz, unless RP would

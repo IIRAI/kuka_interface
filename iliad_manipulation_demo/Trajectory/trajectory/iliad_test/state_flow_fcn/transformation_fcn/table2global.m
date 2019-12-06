@@ -27,7 +27,8 @@ function [pose_in_global] = table2global(pose_in_table)
 % ------------------------------------------------------------------------
 
 % table position, see rviz.
-table_position = [1.3500; 1.2010; 0.7000];
+global table_rs
+table_position = table_rs;
 
 % rotation of the table reference system
 Rot_table = eul2rotm([-pi/2, 0, 0], 'ZYX');
