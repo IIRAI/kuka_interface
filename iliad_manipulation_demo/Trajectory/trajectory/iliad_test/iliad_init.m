@@ -33,8 +33,8 @@ pos_threshold = 0.01;
 % avoid starting from singular position when using rviz, unless RP would
 % stuck/crash
 
-q_left_init  = [0.1, 0.1, 0.1, 0, 0,  1, -1.5]';
-q_right_init = [0.1, 0.1, 0.1, 0, 0, -1,    0]';
+q_left_init  = [ 0.4352, -1.0289,  0.1226, -1.6992, -0.5845,  1.0377, -1.1276]';
+q_right_init = [-0.0000, -1.9509, -0.0000, -1.8703, -0.0000, -0.6711,  0.0000]';
 
 %% Define default position of the arms   ___________________
 % table dimension from rviz model        |    Table        |

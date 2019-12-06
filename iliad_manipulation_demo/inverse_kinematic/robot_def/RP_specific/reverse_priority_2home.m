@@ -2,7 +2,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
 %REVERSE_PRIORITY_2HOME is a modification of `reverse_priority_pos_or_7j`
 %{
 ===========================================================================
-	Exactly as the general reverse_priority.m, but enhanced in performance.
+    Exactly as the general reverse_priority.m, but enhanced in performance.
     On the other hand, this can be used only when all the following tasks 
     are present:
 
@@ -22,7 +22,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
 
     % initialization (i.e. k = 1)
     q(:,1) = q_0;
-  	qd(:,1) = qd_0;
+    qd(:,1) = qd_0;
 
     % ---------------------------------------------------------------------
     % specific part
@@ -43,6 +43,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint  
     
     % configuration space position task
+        % user message
     J{17} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
     J{18} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
     J{19} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 

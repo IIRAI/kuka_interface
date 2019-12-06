@@ -91,8 +91,6 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
             x{18,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
             x{17,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
 
-            x{13,k} = q1;
-            x{14,k} = q1;
             x{1,k}  = q7;
             x{2,k}  = q7;
             x{3,k}  = q6;
@@ -105,6 +103,8 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
             x{10,k} = q3;
             x{11,k} = q2;
             x{12,k} = q2;
+            x{13,k} = q1;
+            x{14,k} = q1;
             
         % -----------------------------------------------------------------
         

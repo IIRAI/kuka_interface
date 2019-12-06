@@ -162,8 +162,8 @@ disp('Left');
 %%
 
 %% Task of the final configuration of the arm ----------------------------------
-table_ee_x = 1.3; %% TODO(ed): write a proper value, testing...
-table_ee_z = 0.8; %% TODO(ed): write a proper value, testing...
+table_ee_x = 1.3;
+table_ee_z = 0.8;
 %% -----------------------------------------------------------------------------
 
 x_home_row = Tee_home(1:3,4)';
@@ -198,8 +198,8 @@ iter_num_1 = t_prova;
 
     % flag showing if p is a task or a constraint  
     unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % max/min joints
-                   1, 2,...   % table constraint
-                   0, 0];  % trajectory and orientation task
+                   1, 2,...  % table constraint
+                   0, 0];    % trajectory and orientation task
     
     % constraint value (NaN when not present)
     x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...   % max/min joints

@@ -176,11 +176,8 @@ ppy = spline(t_samples, x_data(:,2), t);
 ppz = spline(t_samples, x_data(:,3), t);
 
 for i = 1:t_prova
-       
     traj(:,i) = [ppx(i);ppy(i);ppz(i)];
     x_or_ee_des(:, :, i) = quat2rotm(theta_traj(i, :));
-
-        
 end
 
 iter_num_1 = t_prova;
@@ -201,8 +198,8 @@ unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 0,...
                0, 0, 0, 0, 0, 0, 0];
 
 % constraint value (NaN when not present)
-x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min, ...
-          xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min, ...
+x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...
+          xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...
           xj2_max, xj2_min, NaN, NaN,...
           NaN, NaN, NaN, NaN, NaN, NaN, NaN];
 

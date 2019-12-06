@@ -1,12 +1,10 @@
-function q_out = table_spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot, t_rot)
-%TABLE_SPLINE_TRAJ_RIGHT returns the joint trajectory considering the table obstable
+function q_out = home_table_spline_left(t_prova, q_0_right_, wp2_pos, wp2_rot,t_rot)
+%HOME_SPLINE_TRAJ_LEFT returns the joint trajectory for homing
 %   this function creates a joint position trajectory starting from q_0_right.
-%   the cartesian trajectory passes by all positions in wp_pos. The cartesian attitude is a
+%   the cartesian trtajectory passes by all positions in wp_pos. The cartesian attitude is a
 %   generate_line_trajectory between the first attitude (corresponding to the
 %   ee orientation when the robot is in q_0_right) and the attitude described
-%   by wp_rot.
-%   This function consider also the presence of the table as an 
-%   obstacle.
+%   by wp_rot
 % 
 %   INPUT:
 %       t_prova = number of samples of the trajectory.
@@ -15,9 +13,9 @@ function q_out = table_spline_traj_right(t_prova, q_0_right_, wp2_pos, wp2_rot, 
 %       wp_rot = desired attitude in home ee frame
 
 %number of waypoints
-wp_num    = length(wp2_pos) / 3;
+wp_num = length(wp2_pos)/3;
 t_samples = 0 : wp_num;
-step      = t_samples(end) / t_prova;
+step = t_samples(end)/t_prova;
 t = 0 : step : (wp_num-step);
 
 %%
@@ -25,7 +23,7 @@ q_0_right = zeros(1,7);
 for i = 1 : 7
     q_0_right(i) = q_0_right_(i);
 end
-robot_ID = 'TWO_ARMS_r';
+robot_ID = 'TWO_ARMS_l';
 
 %% q
 qd_0 = zeros(7, 1);
@@ -64,14 +62,14 @@ qd_0 = zeros(7, 1);
 
     % from DH7 to ee_right --> Rz(pi)
         T_DH7r_eer = [[[-1 0 0; 0 -1 0; 0 0 1], zeros(3,1)]; [0 0 0 1]];
-        T_eer_DH7r = inv(T_DH7r_eer);
+        %T_eer_DH7r = inv(T_DH7r_eer);
 
         T_DH7l_eel = [[[-1 0 0; 0 -1 0; 0 0 1], zeros(3,1)]; [0 0 0 1]];
-        T_eel_DH7l = inv(T_DH7l_eel);
+        %T_eel_DH7l = inv(T_DH7l_eel);
         
 
 %% parameters for reverse priority algorithm
-N = 18;  % number of task: 14 max/min joints, 2 table constraint, 2 position + orientation tasks
+N = 25;
 Ts = 0.1;
 DPI_lambda_max = 0.1*10^4; 	% damping for pinv
 DPI_epsilon = 0.1;          % bound for pinv
@@ -81,13 +79,11 @@ beta_vel = 0.1;
 
 lambda = 0.9;    
 
-% kp = 0.8;
-% ko = 0.5; 
-kp = 0.008;
-ko = 0.005;                   % orientation error gain
-K = [ones(1,16), kp, ko];  	% error gain vector
-T_b_DH0 = T_b_DH0r;
-T_DH7_ee = T_DH7r_eer;
+kp = 0.008;                                   % position error gain
+ko = 0.005;                                   % orientation error gain
+K = [ones(1,16), kp, ko, 0.01*ones(1,7)];     % error gain vector
+T_b_DH0 = T_b_DH0l;
+T_DH7_ee = T_DH7l_eel;
 
 %% whole parameters vector
 param_vect = [DPI_lambda_max, DPI_epsilon, beta_pos, beta_vel, lambda, K];
@@ -116,7 +112,7 @@ xj7_min = kuka_jmin(6);     % min constraint
 
 xee_max = kuka_jmax(7);    	% max constraint
 xee_min = kuka_jmin(7);    	% min constraint
-    
+   
 %% compute using direct kinematics     
 DH_table_num = KUKA_LWR_DHtable(q_0_right);
 [~, Tee_home] = direct_kinematics_DH(DH_table_num);
@@ -125,49 +121,53 @@ Tee_home = T_b_DH0 * Tee_home * T_DH7_ee;
 R_home = Tee_home(1:3,1:3);
 
 %% transformations
-num_wp_rot = length(wp2_rot)/3;
+%R_off = eul2rotm([0, 0, 0], 'ZYX'); % offset attorno z
+%R_pre = eul2rotm([-pi/2, 0, -pi/2], 'ZYX');
+R_pre = [ 0 0 1; -1  0 0; 0 -1 0];
+R2    = [-1 0 0;  0 -1 0; 0  0 1];
 %R2 = eul2rotm([pi, 0, 0], 'ZYX');
-R2 = [-1 0 0; 0 -1 0; 0 0 1];
-q_2 = rotm2quat(R2);
-%R_pre = eul2rotm([pi, -pi/2, 0], 'ZYX'); 
-R_pre = [0 0 1; 0 -1 0; 1 0 0];
-q_pre = rotm2quat(R_pre);
-
-q  = [];
+R1 = eul2rotm([0, 0, pi/6], 'ZYX');
+num_wp_rot = length(wp2_rot)/3;
+%ZYX_0 = rotm2eul(R_home);
 q0 = rotm2quat(R_home);
-i = 1;
+%%
+%ZYX = ZYX_0;
 ZYX = [];
-for j = 1:num_wp_rot
-    q = [q; wp2_rot(i:i+2)'];
+i = 1;
+for j = 1:num_wp_rot   
     ZYX = [ZYX; wp2_rot(i:i+2)'];
-
     i = i+3
 end
 
-R_1 = R_pre*eul2rotm(ZYX(1,:))*R2;
-q1 = rotm2quat((R_1));
+R_1 = R_pre*eul2rotm(ZYX(1,:))*R1*R2;
+%ZYX_1 = rotm2eul(R_1);
+q1 = rotm2quat(R_1);
 theta_traj = [generate_slerp(q0, q1, t_rot(1))];
 
 k = 2;
-disp('Right');
-
-%% Task of the final configuration of the arm ----------------------------------
-table_ee_x = 1.20;  %% TODO(ed): write a proper value, testing...
-table_ee_z = 0.80;  %% TODO(ed): write a proper value, testing...
-%% -----------------------------------------------------------------------------
-
 for j = 1:num_wp_rot-1
-    R_1 = R_pre*eul2rotm(ZYX(k,:))*R2;
-    q1 = [q1; rotm2quat((R_1))];
-    X = generate_slerp(q1(j,:), q1(j+1,:), t_rot(1));
+    R_1 = R_pre*eul2rotm(ZYX(k,:))*R1*R2;
+    %ZYX_1 = [ZYX_1; rotm2eul(R_1)];
+    q1 = [q1;rotm2quat(R_1)];
+    X = generate_slerp(q1(j,:), q1(j+1,:), t_rot(j+1));
     theta_traj = [theta_traj; X];
-
+    
     k = k+1;
 end
+disp('Left');
+
+%% Task of the final configuration of the arm ----------------------------------
+q_home_left = [0.4352, -1.0289, 0.1226, -1.6992, -0.5845, 1.0377, -1.1276];
+qhl = q_home_left;
+%% Task of the final configuration of the arm ----------------------------------
+table_ee_x = 1.2;
+table_ee_z = 0.8;
+%% -----------------------------------------------------------------------------
+
 x_home_row = Tee_home(1:3,4)';
 
 x_data = x_home_row;
-i=1;
+i = 1;
 for j = 1:wp_num
     x_data = [x_data;wp2_pos(i:i+2)'];
     i = i+3;
@@ -179,41 +179,44 @@ ppz = spline(t_samples, x_data(:,3), t);
 
 for i = 1:t_prova
     traj(:,i) = [ppx(i);ppy(i);ppz(i)];
-    x_or_ee_des(:, :, i) = quat2rotm(theta_traj(i, :));
+    x_or_ee_des(:, :, i) = quat2rotm(theta_traj(i,:));
 end
 
  iter_num_1 = t_prova;
         
-        x_des = cell(N, iter_num_1);  % init for speed
+        x_des = cell(N, iter_num_1);  % init for speed 
         for k = 1 : iter_num_1
-            x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max;...
-                          xj6_min; xj5_max; xj5_min; xj4_max; xj4_min;...
-                          xj3_max; xj3_min; xj2_max; xj2_min;...
-                          table_ee_x; table_ee_z;...
-                          traj(:,k); x_or_ee_des(:,:,k)};
-        end
+             x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max; ... % ******
+                           xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ... % ******
+                           xj3_max; xj3_min; xj2_max; xj2_min; ...
+                           table_ee_x; table_ee_z;...
+                           traj(:,k); x_or_ee_des(:,:,k);...
+                           qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7)};
+        end        
+        
         % variables for RP algorithm
     
-    % flag showing if p is a task or a constraint  
-    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % max/min joints
-                   1, 2,...   % table constraint
-                   0, 0];  % trajectory and orientation task
-    
-    % constraint value (NaN when not present)
-    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...  % max/min joints
-              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...  % max/min joints
-              xj2_max, xj2_min,...                                      % max/min joints
-              table_ee_x, table_ee_z,...                                % table constraint
-              NaN, NaN];                                                % trajectory and orientation task
-disp('Here');
-%% algorithm
+    % flag showing if p is a task or a constraint 
+    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...
+                   1, 2,...  % table constraint
+                   0, 0,...
+                   0, 0, 0, 0, 0, 0, 0];
+     
+    % constraint value (NaN when not present)  
+    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...
+              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...
+              xj2_max, xj2_min,...
+              table_ee_x, table_ee_z,...
+              NaN, NaN,...
+              NaN, NaN, NaN, NaN, NaN, NaN, NaN];
 
+%% algorithm
 % define function handles of J and T for the fast version
 J_and_T_hand = def_JT_handle(robot_ID);
 
-% execute algorithm considering the table constraint
-[q_out, ~, ~] = reverse_priority_table(N, Ts, iter_num_1, ...
-                                       J_and_T_hand, ...
-                                       q_0_right, qd_0, x_des, ...
-                                       unil_constr, ...
-                                       x_cons, param_vect);
+% execute algorithm
+[q_out, ~, ~] = reverse_priority_2home_table(N, Ts, iter_num_1, ...
+                                             J_and_T_hand, ...
+                                             q_0_right, qd_0, x_des, ...
+                                             unil_constr, ...
+                                             x_cons, param_vect);

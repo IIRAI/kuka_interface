@@ -79,8 +79,8 @@ beta_vel = 0.1;
 
 lambda = 0.9;    
 
-kp = 0.008;                                   % position error gain
-ko = 0.005;                                   % orientation error gain
+kp = 0.008;                                 % position error gain
+ko = 0.005;                                 % orientation error gain
 K = [ones(1,14), kp, ko, 0.01*ones(1,7)];  	% error gain vector
 T_b_DH0 = T_b_DH0l;
 T_DH7_ee = T_DH7l_eel;
