@@ -100,4 +100,9 @@ qr = [qr q_R(:,end)];
 
 ql = [ql q_L(:,end)];
 
+%% normalize output length
+max_output_len = 4000;
+ql = [ql, repmat(ql(1:7, size(ql, 2)), 1, max_output_len - size(ql,2))];
+qr = [qr, repmat(qr(1:7, size(qr, 2)), 1, max_output_len - size(qr,2))];
+
 end

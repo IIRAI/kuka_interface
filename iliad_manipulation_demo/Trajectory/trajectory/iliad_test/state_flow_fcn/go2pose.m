@@ -1,7 +1,6 @@
 function [qd_left, qd_right] = go2pose(q_init_left, q_init_right,...
                                        pose_left, pose_right,...
-                                       t_prova, max_output_len,...
-                                       scale_traj)
+                                       t_prova)
 %GO2POSE returns the joint trajectory to send VITO_ILIAD to the input pose.
 % ---------------------------------------------------------------------------- %
 %   INPUT:
@@ -40,8 +39,8 @@ else                            % move both arms
                                              t_prova(1,2));
 end
 
-qd_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
-qd_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
+qd_left  = qd_local_left;
+qd_right = qd_local_right;
 
 end
 

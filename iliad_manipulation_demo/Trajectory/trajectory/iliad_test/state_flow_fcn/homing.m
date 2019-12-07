@@ -29,10 +29,13 @@ rot_home_right = zeros(3, 1);
 % evaluate joint trajectory for homing
 qd_local_left  = home_table_spline_left(t_prova(1,1), q_init_left,  pos_home_left,  rot_home_left,  t_prova(1,1));
 qd_local_right = home_spline_traj_right(t_prova(1,2), q_init_right, pos_home_right, rot_home_right, t_prova(1,2));
-% OUTPUT: normalize trajectory to `max_output_length`
 
-qd_home_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
-qd_home_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
+% OUTPUT: normalize trajectory to `max_output_length`
+% qd_home_left  = [qd_local_left,  repmat(qd_local_left(1:7,  t_prova(1,2)), 1, max_output_len - t_prova(1,2))];
+% qd_home_right = [qd_local_right, repmat(qd_local_right(1:7, t_prova(1,1)), 1, max_output_len - t_prova(1,1))];
+
+qd_home_left  = qd_local_left;
+qd_home_right = qd_local_right;
 
 end
 
