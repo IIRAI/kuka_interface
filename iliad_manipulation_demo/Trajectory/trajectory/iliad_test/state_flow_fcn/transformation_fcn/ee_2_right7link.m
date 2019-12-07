@@ -30,7 +30,7 @@ else % strcmp(reference, 'reverse_priority') <-- default reference system
 end
 
 %% soft hand offset wrt the right_arm_7_link in local frame
-hand_offset_local = [0.02, 0, -0.10]';
+hand_offset_local = [0.02, 0, -0.15]';
 
 %% transformation to obtain the soft hand offset in global reference system
 % angle offset of right_arm_7_link wrt the global frame
