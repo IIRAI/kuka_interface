@@ -16,7 +16,12 @@ disp('           `pose_right_def`                            ');
 disp(' `I2`: make a pre-defined movement based on the        ');
 disp('       object position.                                ');
 disp(' `I3`: is reserved for dual manipulation, do not use it');
-disp(' `I4`: close soft-hand                                 ');
-disp(' `I5`: open  soft-hand                                 ');
+disp(' `I4`: close soft-hand for test_iliad.slx              ');
+disp(' `I5`: open  soft-hand for test_iliad.slx              ');
+disp(' `I6`: open HAND in simulation/real robot              ');
+disp('       input the value [0, 1] for the hand synergy     ');
+disp(' `I7`: open VELVET in simulation/real robot            ');
+disp('       input the value [0, 1] for the velvet control   ');
 disp(' ------------------------------------------------------');
 disp('                                                       ');
+

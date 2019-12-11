@@ -26,6 +26,12 @@ command   = reqMsg.Command;
 ee_name   = reqMsg.EeName;
 waypoints = reqMsg.Waypoints;
 
+disp('***** command:')
+disp(command)
+disp('***** ee_name:')
+disp(ee_name)
+disp('***************')
+
 if strcmp(command, 'home')
     disp('going home...')
     set_param(sim_name + '/Icode','Value', '0');
@@ -39,9 +45,23 @@ elseif strcmp(ee_name, 'full_robot')
         set_arms(waypoints(2:3));
     end
 else
-    for t = 1 : length(waypoints) % size(waypoints, 1)
-        waypoint_position    = waypoints(t).Position;
-        waypoint_orientation = waypoints(t).Orientation;
+    disp('***** # waypoints:')
+    disp(length(waypoints))
+    disp('*******************')
+    if length(waypoints) > 2
+        waypoint_position    = waypoints(2).Position;
+        waypoint_orientation = waypoints(2).Orientation;
+        pose_global = [waypoint_position.X;
+                       waypoint_position.Y;
+                       waypoint_position.Z;
+                       waypoint_orientation.Z;
+                       waypoint_orientation.Y;
+                       waypoint_orientation.X];
+        % manage received waypoint
+        arm_waypoint(ee_name, pose_global);
+    else
+        waypoint_position    = waypoints(1).Position;
+        waypoint_orientation = waypoints(1).Orientation;
         pose_global = [waypoint_position.X;
                        waypoint_position.Y;
                        waypoint_position.Z;
@@ -52,6 +72,8 @@ else
         arm_waypoint(ee_name, pose_global);
     end
 end
+
+clear waypoints
 
 disp(' ')
 
