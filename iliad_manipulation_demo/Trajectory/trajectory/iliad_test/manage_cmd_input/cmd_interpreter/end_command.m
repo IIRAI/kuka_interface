@@ -29,5 +29,5 @@ set_param(sim_name + '/object_pose', 'Value',...
 %% closing output
 disp(' ')
 disp('-------------------------------------------------------')
-disp('Now CLOSE the `' + sim_name + '.slx` and RUN `iliad_test_end`');
+disp('Now CLOSE the `' + sim_name + '.slx` and RUN `iliad_end`');
 disp('-------------------------------------------------------')

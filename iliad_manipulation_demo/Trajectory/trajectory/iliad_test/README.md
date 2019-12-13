@@ -76,4 +76,9 @@ launch the dual manipulation planner
 
     roslaunch dual_manipulation_gui gui_ctrl_matlab.launch
 
-Then run the `iliad_main.m`, each cell separately and follow the instruction.  
+Then run the `iliad_main.m`, each cell separately and follow the instruction.
+
+NOTE: in case you want to send the robot to the home position without using 
+reverse priority use the command
+
+    rosrun kuka_interface_pkg homing
