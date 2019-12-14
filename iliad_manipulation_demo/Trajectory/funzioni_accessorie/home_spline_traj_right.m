@@ -77,11 +77,11 @@ DPI_epsilon = 0.1;          % bound for pinv
 beta_pos = 0.01;
 beta_vel = 0.1;
 
-lambda = 0.9;    
+lambda = 0.9;
 
 kp = 0.008;                                   % position error gain
 ko = 0.005;                                   % orientation error gain
-K = [ones(1,14), kp, ko, 0.01*ones(1,7)];  	% error gain vector
+K = [ones(1,14), 0.01*ones(1,7), kp, ko];     % error gain vector
 T_b_DH0 = T_b_DH0r;
 T_DH7_ee = T_DH7r_eer;
 
@@ -187,8 +187,8 @@ for k = 1 : iter_num_1
     x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max; ...
                   xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ...
                   xj3_max; xj3_min; xj2_max; xj2_min; ...
-                  traj(:,k); x_or_ee_des(:,:,k);...
-                  qhr(1); qhr(2); qhr(3); qhr(4); qhr(5); qhr(6); qhr(7)};
+                  qhr(1); qhr(2); qhr(3); qhr(4); qhr(5); qhr(6); qhr(7);...
+                  traj(:,k); x_or_ee_des(:,:,k)};
 end        
 
 % variables for RP algorithm

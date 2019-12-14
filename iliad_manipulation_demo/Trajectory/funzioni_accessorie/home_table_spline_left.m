@@ -81,7 +81,7 @@ lambda = 0.9;
 
 kp = 0.008;                                   % position error gain
 ko = 0.005;                                   % orientation error gain
-K = [ones(1,16), kp, ko, 0.01*ones(1,7)];     % error gain vector
+K = [ones(1,16), 0.01*ones(1,7), kp, ko];     % error gain vector
 T_b_DH0 = T_b_DH0l;
 T_DH7_ee = T_DH7l_eel;
 
@@ -134,7 +134,7 @@ q0 = rotm2quat(R_home);
 %ZYX = ZYX_0;
 ZYX = [];
 i = 1;
-for j = 1:num_wp_rot   
+for j = 1 : num_wp_rot
     ZYX = [ZYX; wp2_rot(i:i+2)'];
     i = i+3
 end
@@ -145,7 +145,7 @@ q1 = rotm2quat(R_1);
 theta_traj = [generate_slerp(q0, q1, t_rot(1))];
 
 k = 2;
-for j = 1:num_wp_rot-1
+for j = 1 : num_wp_rot-1
     R_1 = R_pre*eul2rotm(ZYX(k,:))*R1*R2;
     %ZYX_1 = [ZYX_1; rotm2eul(R_1)];
     q1 = [q1;rotm2quat(R_1)];
@@ -169,7 +169,7 @@ x_home_row = Tee_home(1:3,4)';
 x_data = x_home_row;
 i = 1;
 for j = 1:wp_num
-    x_data = [x_data;wp2_pos(i:i+2)'];
+    x_data = [x_data; wp2_pos(i:i+2)'];
     i = i+3;
 end
 
@@ -190,25 +190,25 @@ end
                            xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ... % ******
                            xj3_max; xj3_min; xj2_max; xj2_min; ...
                            table_ee_x; table_ee_z;...
-                           traj(:,k); x_or_ee_des(:,:,k);...
-                           qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7)};
+                           qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7);...
+                           traj(:,k); x_or_ee_des(:,:,k)};
         end        
         
         % variables for RP algorithm
     
     % flag showing if p is a task or a constraint 
-    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...
-                   1, 2,...  % table constraint
-                   0, 0,...
-                   0, 0, 0, 0, 0, 0, 0];
+    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % joint limit constraint
+                   1, 2,...                                      % table constraint
+                   0, 0, 0, 0, 0, 0, 0,...                       % final joint contraint
+                   0, 0];                                        % trajectory contraint
      
     % constraint value (NaN when not present)  
-    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...
-              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...
-              xj2_max, xj2_min,...
-              table_ee_x, table_ee_z,...
-              NaN, NaN,...
-              NaN, NaN, NaN, NaN, NaN, NaN, NaN];
+    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...  % joint limit constraint
+              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...  % joint limit constraint
+              xj2_max, xj2_min,...                                      % joint limit constraint
+              table_ee_x, table_ee_z,...                                % table constraint
+              NaN, NaN, NaN, NaN, NaN, NaN, NaN,...                     % final joint contraint
+              NaN, NaN];                                                % trajectory contraint
 
 %% algorithm
 % define function handles of J and T for the fast version

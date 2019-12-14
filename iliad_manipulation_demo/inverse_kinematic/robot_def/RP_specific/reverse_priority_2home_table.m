@@ -46,17 +46,17 @@ J{13} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 max unilateral constraint
 J{14} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 2 min unilateral constraint  
 
 % configuration space position task
-J{19} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
-J{20} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
-J{21} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
-J{22} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
-J{23} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
-J{24} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
-J{25} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
+J{17} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
+J{18} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
+J{19} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
+J{20} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
+J{21} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
+J{22} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
+J{23} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
     
 % (qdMAX) error init for variable gain 
 e = cell(N,1);
-e{17,1} = (x_des{17,1} - J_and_T_hand{3}(q_0)); 
+e{24,1} = (x_des{24,1} - J_and_T_hand{3}(q_0)); 
 
 % ---------------------------------------------------------------------
     
@@ -100,12 +100,12 @@ for k = 2 : iter_num
     end
 
     % numeric jacobian
-    J{18} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
-    J{17} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+    J{25} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+    J{24} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
 
     % actual x
-    x{18,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
-    x{17,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+    x{25,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
+    x{24,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
 
     % max/min joint limit
     x{1,k}  = q7;
@@ -124,13 +124,13 @@ for k = 2 : iter_num
     x{14,k} = q1;
 
     % task to achieve desired joint configuration (home desired configuration)
-    x{19,k} = q1; 
-    x{20,k} = q2;
-    x{21,k} = q3; 
-    x{22,k} = q4;
-    x{23,k} = q5; 
-    x{24,k} = q6;
-    x{25,k} = q7;
+    x{17,k} = q1; 
+    x{18,k} = q2;
+    x{19,k} = q3; 
+    x{20,k} = q4;
+    x{21,k} = q5; 
+    x{22,k} = q6;
+    x{23,k} = q7;
 
     % -----------------------------------------------------------------
     
@@ -171,7 +171,7 @@ for k = 2 : iter_num
     
         % (qdMAX) scale gain by position error
         param_vect2 = param_vect;
-        if norm(e{17,k-1},2) < 0.01
+        if norm(e{24,k-1},2) < 0.01
             param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
         end
         

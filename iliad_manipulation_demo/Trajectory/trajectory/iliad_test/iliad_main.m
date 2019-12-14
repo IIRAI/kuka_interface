@@ -3,8 +3,8 @@
 
 %% initialize variables
 global sim_name;
-%sim_name = "iliad_test"; % for visualization
-sim_name = "iliad_ctrl"; % for simulation
+sim_name = "iliad_test"; % for visualization
+% sim_name = "iliad_ctrl"; % for simulation
 
 iliad_init
                      

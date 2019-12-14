@@ -21,7 +21,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     disp('Reverse priority algorithm initialization');
 
     % initialization (i.e. k = 1)
-    q(:,1) = q_0;
+    q(:,1)  = q_0;
     qd(:,1) = qd_0;
 
     % ---------------------------------------------------------------------
@@ -44,17 +44,17 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
     
     % configuration space position task
         % user message
-    J{17} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
-    J{18} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
-    J{19} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
-    J{20} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
-    J{21} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
-    J{22} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
-    J{23} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
+    J{15} = [ 1, 0, 0, 0, 0, 0, 0]; % joint 1 final position task 
+    J{16} = [ 0, 1, 0, 0, 0, 0, 0]; % joint 2 final position task
+    J{17} = [ 0, 0, 1, 0, 0, 0, 0]; % joint 3 final position task 
+    J{18} = [ 0, 0, 0, 1, 0, 0, 0]; % joint 4 final position task
+    J{19} = [ 0, 0, 0, 0, 1, 0, 0]; % joint 5 final position task 
+    J{20} = [ 0, 0, 0, 0, 0, 1, 0]; % joint 6 final position task
+    J{21} = [ 0, 0, 0, 0, 0, 0, 1]; % joint 7 final position task
         
     % (qdMAX) error init for variable gain 
-    e = cell(23,1);              	
-    e{15,1} = (x_des{15,1} - J_and_T_hand{3}(q_0)); 
+    e = cell(N,1);              	
+    e{22,1} = (x_des{22,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
         
@@ -76,12 +76,12 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
             q7 = q(7, k-1);
 
             % numeric jacobian
-            J{15} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
-            J{16} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{22} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+            J{23} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
-            x{16,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
-            x{15,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            x{22,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            x{23,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
 
             % max/min joint limit
             x{1,k}  = q7;
@@ -100,13 +100,13 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
             x{14,k} = q1;
 
             % task to achieve desired joint configuration (home desired configuration)
-            x{17,k} = q1; 
-            x{18,k} = q2;
-            x{19,k} = q3; 
-            x{20,k} = q4;
-            x{21,k} = q5; 
-            x{22,k} = q6;
-            x{23,k} = q7;
+            x{15,k} = q1; 
+            x{16,k} = q2;
+            x{17,k} = q3; 
+            x{18,k} = q4;
+            x{19,k} = q5; 
+            x{20,k} = q6;
+            x{21,k} = q7;
 
         % -----------------------------------------------------------------
         
@@ -147,7 +147,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         
             % (qdMAX) scale gain by position error
             param_vect2 = param_vect;
-            if norm(e{15,k-1},2) < 0.01
+            if norm(e{22,k-1},2) < 0.01
                 param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
             end
             
@@ -168,7 +168,7 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         
         % append to vectors
         qd = [qd, qd_new];
-        e = [e, e_new];              
+        e  = [e, e_new];
         
         % append new q, given by integration
         q = [q, q(:,k-1) + qd_new*Ts];
