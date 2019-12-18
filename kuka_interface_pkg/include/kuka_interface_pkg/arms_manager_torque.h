@@ -36,7 +36,6 @@ private:
     void FTsensor_callback_right(const geometry_msgs::WrenchStamped::ConstPtr& msg);
     void FTsensor_callback_left(const geometry_msgs::WrenchStamped::ConstPtr& msg);
     void sensor_thread_callback();
-    // void publishCamera();
 
 
     dynamic_reconfigure::Server<kuka_interface_pkg::config_toolConfig> server;
@@ -54,6 +53,7 @@ private:
     tf::Vector3 bias_force_right_;
     tf::Vector3 bias_torque_right_;
     tf::Vector3 bias_force_left_;
+    tf::Vector3 bias_torque_left_;
     int calibration_number = 100;
     int calibration_counter_right_ = 0;
     int calibration_counter_left_ = 0;
@@ -62,13 +62,13 @@ private:
     std::atomic<int> force_flag_right;
     std::atomic<int> force_flag_left;
     void store_reference(const geometry_msgs::Pose& in, trajectory_msgs::JointTrajectory& out);
-    bool gravityCompensation(float mass, geometry_msgs::WrenchStamped msg, tf::Vector3& f);
+    bool gravityCompensation(float mass, geometry_msgs::WrenchStamped msg, tf::Vector3& f,tf::Vector3& t);
 
     ros::NodeHandle nh, private_nh_;
     std::mutex traj_left_mutex, traj_right_mutex;
     trajectory_msgs::JointTrajectory traj_left, traj_right;
     ros::Publisher pub_command_left, pub_command_right, pub_compensated_right, pub_compensated_left;
-    ros::Publisher pub_feedback_left, pub_feedback_right, pub_camera;
+    ros::Publisher pub_feedback_left, pub_feedback_right;
     ros::Subscriber sub_left, sub_right;
     ros::Subscriber sub_left_aux, sub_right_aux;
     ros::Subscriber sub_command_force_left_aux, sub_command_force_right_aux;

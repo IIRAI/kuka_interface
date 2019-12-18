@@ -25,6 +25,16 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
     cons_table_x = x_cons(15);
     cons_table_z = x_cons(16);
 
+    %% ------------------------------------------------
+    limit_x = 1.20;
+    limit_z = 0.10;
+
+    limit_m = (cons_table_z - limit_z) / ...
+              (cons_table_x - limit_x);
+
+    limit_q = ((cons_table_z * limit_x) - (cons_table_x * limit_z)) / ...
+              (cons_table_x - limit_x);
+    %% ------------------------------------------------
 
     % ---------------------------------------------------------------------
     % specific part
@@ -53,65 +63,67 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
     for k = 2 : iter_num
         % -----------------------------------------------------------------
         % specific part
-            q1 = q(1, k-1);
-            q2 = q(2, k-1);
-            q3 = q(3, k-1);
-            q4 = q(4, k-1);
-            q5 = q(5, k-1);
-            q6 = q(6, k-1);
-            q7 = q(7, k-1);
+        q1 = q(1, k-1);
+        q2 = q(2, k-1);
+        q3 = q(3, k-1);
+        q4 = q(4, k-1);
+        q5 = q(5, k-1);
+        q6 = q(6, k-1);
+        q7 = q(7, k-1);
 
-            % numeric jacobian for table constraint, on z axis --> 3rd row
-            Jee_table = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
-            J{15} = Jee_table(1,:);
-            J{16} = Jee_table(3,:);
-            % actual x for table constraint --> position on z axis
-            Tee_table = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
-            x{15,k} = Tee_table(1,:);
-            x{16,k} = Tee_table(3,:);
+        % numeric jacobian for table constraint, on z axis --> 3rd row
+        Jee_table = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
+        J{15} = Jee_table(1,:);
+        J{16} = Jee_table(3,:);
+        % actual x for table constraint --> position on z axis
+        Tee_table = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
+        x{15, k} = Tee_table(1,:);
+        x{16, k} = Tee_table(3,:);
 
-            % check the position of the ee in the x and z axis and activate 
-            % or deactivate the table constraint accordingly
-            if x{15,k} < cons_table_x  % x less than table, deactivate z constraint
-                x_cons(16) = 0;
-            else
-                x_cons(16) = cons_table_z;
-            end
-            if x{16,k} > cons_table_z  % z more than table, deactivate x constraint
-                x_cons(15) = 10000;
-            else
-                x_cons(15) = cons_table_x;
-            end
+        % check the position of the ee in the x and z axis and activate 
+        % or deactivate the table constraint accordingly
+        if x{15, k} < cons_table_x  % x less than table, deactivate z constraint
+            x_cons(16) = 0;
+            % x_cons(16) = (x{15, k} - limit_q) / limit_m;
+            % x_cons(16) = (x{15, k} * limit_m) + limit_q;
+        else
+            x_cons(16) = cons_table_z;
+        end
+        if x{16, k} > cons_table_z  % z more than table, deactivate x constraint
+            x_cons(15) = 10000;
+        else
+            x_cons(15) = cons_table_x;
+        end
 
-            % numeric jacobian
-            J{18} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
-            J{17} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+        % numeric jacobian
+        J{18} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]);
+        J{17} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]);
 
-            % actual x
-            x{18,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
-            x{17,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+        % actual x
+        x{18,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
+        x{17,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]);
 
-            x{1,k}  = q7;
-            x{2,k}  = q7;
-            x{3,k}  = q6;
-            x{4,k}  = q6;
-            x{5,k}  = q5;
-            x{6,k}  = q5;
-            x{7,k}  = q4;
-            x{8,k}  = q4;
-            x{9,k}  = q3;
-            x{10,k} = q3;
-            x{11,k} = q2;
-            x{12,k} = q2;
-            x{13,k} = q1;
-            x{14,k} = q1;
-            
+        x{1,k}  = q7;
+        x{2,k}  = q7;
+        x{3,k}  = q6;
+        x{4,k}  = q6;
+        x{5,k}  = q5;
+        x{6,k}  = q5;
+        x{7,k}  = q4;
+        x{8,k}  = q4;
+        x{9,k}  = q3;
+        x{10,k} = q3;
+        x{11,k} = q2;
+        x{12,k} = q2;
+        x{13,k} = q1;
+        x{14,k} = q1;
+        
         % -----------------------------------------------------------------
         
         x_cur = x(:,k);                     % x: cell array 
         
-        x_des_cur = x_des(:,k);
-        x_des_prev = x_des(:,k-1); 
+        x_des_cur  = x_des(:,k);
+        x_des_prev = x_des(:,k-1);
         
         qd_prev = qd(:,k-1);
               

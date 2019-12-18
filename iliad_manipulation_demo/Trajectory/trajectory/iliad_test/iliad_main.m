@@ -7,7 +7,7 @@ sim_name = "iliad_test"; % for visualization
 % sim_name = "iliad_ctrl"; % for simulation
 
 iliad_init
-                     
+
 %% display iliad_test command prompt to interact with the robot
 activate_command
 

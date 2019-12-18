@@ -159,9 +159,9 @@ disp('Left');
 %% Task of the final configuration of the arm ----------------------------------
 q_home_left = [0.4352, -1.0289, 0.1226, -1.6992, -0.5845, 1.0377, -1.1276];
 qhl = q_home_left;
-%% Task of the final configuration of the arm ----------------------------------
-table_ee_x = 1.2;
-table_ee_z = 0.8;
+%% table constraints -----------------------------------------------------------
+table_ee_x = 1.10;
+table_ee_z = 0.90;
 %% -----------------------------------------------------------------------------
 
 x_home_row = Tee_home(1:3,4)';
@@ -192,7 +192,7 @@ end
                            table_ee_x; table_ee_z;...
                            qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7);...
                            traj(:,k); x_or_ee_des(:,:,k)};
-        end        
+        end
         
         % variables for RP algorithm
     

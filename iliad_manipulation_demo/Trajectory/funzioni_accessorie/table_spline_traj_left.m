@@ -161,9 +161,9 @@ end
 disp('Left');
 %%
 
-%% Task of the final configuration of the arm ----------------------------------
-table_ee_x = 1.3;
-table_ee_z = 0.8;
+%% table constraints -----------------------------------------------------------
+table_ee_x = 1.30;
+table_ee_z = 0.80;
 %% -----------------------------------------------------------------------------
 
 x_home_row = Tee_home(1:3,4)';

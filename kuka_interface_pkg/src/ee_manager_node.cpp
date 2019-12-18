@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     device_params soft_hand_params;
     soft_hand_params.ID = 2;
     soft_hand_params.min = 0;
-    soft_hand_params.max = 14000;
+    soft_hand_params.max = 15000;
     soft_hand_params.topic = "/hand_cmd";
     
     dl["soft_hand"] = soft_hand_params;

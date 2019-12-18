@@ -22,6 +22,8 @@ disp(' `I6`: open HAND in simulation/real robot              ');
 disp('       input the value [0, 1] for the hand synergy     ');
 disp(' `I7`: open VELVET in simulation/real robot            ');
 disp('       input the value [0, 1] for the velvet control   ');
+disp(' `I8`: asks for a vector 1x6,                          ');
+disp('       which defines the velvet sensible axis          ');
 disp(' ------------------------------------------------------');
 disp('                                                       ');
 

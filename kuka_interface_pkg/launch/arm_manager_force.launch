@@ -3,9 +3,12 @@
 	<param name="use_right_arm" value="true" />
 	<param name="use_left_arm" value="true" />
     	<param name="use_force_sensor_right" value="true" />
+    	<param name="use_force_sensor_left" value="true" />
+
     	<param name="calibration_number" value="100" />
     	<param name="world_frame" value="vito_anchor" />
-    	<param name="ee_mass_right" value="0.65" />
-    	<param name="ee_mass_left" value="0.0" /> <!-- FIXME -->
+    	<param name="ee_mass_right" value="1.0" /> <!-- 0.65 Hand -->
+    	<param name="ee_mass_left" value="1.8" /> <!-- FIXME -->
     </node>
+    <node name="ee_manager" pkg="kuka_interface_pkg" type="ee_manager_node"/>  
 </launch>

@@ -58,3 +58,7 @@ target_link_libraries(single_lwr_homing ${catkin_LIBRARIES})
 add_executable(fake_force_sensor_publisher_node src/fake_force_sensor_publisher_node.cpp)
 add_dependencies(fake_force_sensor_publisher_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(fake_force_sensor_publisher_node ${catkin_LIBRARIES})
+
+add_executable(arms_manager_torque_node src/arms_manager_torque_node.cpp src/arms_manager_chiara_torques.cpp)
+add_dependencies(arms_manager_torque_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg shared_msgs_generate_messages_cpp)
+target_link_libraries(arms_manager_torque_node ${catkin_LIBRARIES})

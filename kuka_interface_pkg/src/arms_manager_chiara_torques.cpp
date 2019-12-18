@@ -1,9 +1,9 @@
-#include "kuka_interface_pkg/arms_manager.h"
+#include "kuka_interface_pkg/arms_manager_torque.h"
 
 ArmsManager::ArmsManager(): private_nh_("~")
 {
     private_nh_.param("use_right_arm", use_right_arm_, true);
-    private_nh_.param("use_left_arm", use_left_arm_, false);
+    private_nh_.param("use_left_arm", use_left_arm_, true);
     private_nh_.param("ee_mass_right", ee_mass_right, 0.0); //FIXME to be estimated
     private_nh_.param("ee_mass_left", ee_mass_left, 0.0); //FIXME to be estimated
     private_nh_.param("use_force_sensor_right", use_force_sensor_right_, false);
@@ -59,7 +59,6 @@ ArmsManager::ArmsManager(): private_nh_("~")
     sub_emergency_right = nh.subscribe("/right_arm/emergency_event",1,&ArmsManager::emergency_callback,this);
     sub_emergency_right = nh.subscribe("/left_arm/emergency_event",1,&ArmsManager::emergency_callback,this);
 
-    pub_camera = nh.advertise<geometry_msgs::PoseStamped>("/camera_pose", 10);
 
     pub_compensated_right = nh.advertise<geometry_msgs::WrenchStamped>("/right_compensated", 10);
     pub_compensated_left = nh.advertise<geometry_msgs::WrenchStamped>("/left_compensated", 10);
@@ -85,7 +84,9 @@ ArmsManager::ArmsManager(): private_nh_("~")
     }
 
     bias_force_right_[0] = bias_force_right_[1] = bias_force_right_[2] = 0;
+    bias_torque_right_[0] = bias_torque_right_[1] = bias_torque_right_[2] = 0;
     bias_force_left_[0] = bias_force_left_[1] = bias_force_left_[2] = 0;
+    bias_torque_left_[0] = bias_torque_left_[1] = bias_torque_left_[2] = 0;
     force_flag_right.store(shared_msgs::FeedbackTrajectory::NOT_SENSED);
     force_flag_left.store(shared_msgs::FeedbackTrajectory::NOT_SENSED);
 
@@ -303,37 +304,10 @@ void ArmsManager::callback_command_force_right_aux(const shared_msgs::CommandTra
 }
 
 
-
-// void ArmsManager::publishCamera() 
-// {
-//     tf::StampedTransform transform;
-//   try
-//   {
-//     tf_listener_.waitForTransform("world", "camera_rgb_optical_frame", ros::Time(0), ros::Duration(0.1));
-//     tf_listener_.lookupTransform("world", "camera_rgb_optical_frame", ros::Time(0), transform);
-//   }
-//   catch (const std::exception& e)
-//   {
-//     ROS_WARN_STREAM("error in arms manager " << e.what());
-//   }
-//   geometry_msgs::PoseStamped camera_pose;
-//   camera_pose.pose.position.x = transform.getOrigin().x();
-//   camera_pose.pose.position.y = transform.getOrigin().y(),
-//   camera_pose.pose.position.z = transform.getOrigin().z(),
-
-// camera_pose.pose.orientation.x = transform.getRotation().x();
-// camera_pose.pose.orientation.y = transform.getRotation().y();
-// camera_pose.pose.orientation.z = transform.getRotation().z();
-// camera_pose.pose.orientation.w = transform.getRotation().w();
-// camera_pose.header.stamp = ros::Time::now();
-
-// pub_camera.publish(camera_pose);
-// }
-
-bool ArmsManager::gravityCompensation(float mass, geometry_msgs::WrenchStamped msg, tf::Vector3& f)
+bool ArmsManager::gravityCompensation(float mass, geometry_msgs::WrenchStamped msg, tf::Vector3& f, tf::Vector3& t)
 {
 	tf::Vector3 weight_force_world_frame(0.0,0.0,-9.81*mass);
-
+  tf::Vector3 weight_force_arm_sensor_frame(0.0,0.02,0.08);
 	//get the current transform between world and sensor frame
 	tf::StampedTransform transform;
 	try
@@ -346,8 +320,6 @@ bool ArmsManager::gravityCompensation(float mass, geometry_msgs::WrenchStamped m
 	  ROS_WARN_STREAM("error in arms manager " << e.what());
 	  return false;
 	}
-
-
 
           tf::Matrix3x3 R_world2sensor = transform.getBasis().transpose();
 
@@ -376,9 +348,16 @@ bool ArmsManager::gravityCompensation(float mass, geometry_msgs::WrenchStamped m
 	weight_force_sensor_frame[1] = R_world2sensor[1][2]*weight_force_world_frame[2];
 	weight_force_sensor_frame[2] = R_world2sensor[2][2]*weight_force_world_frame[2];
 
+  tf::Vector3 weight_torque_sensor_frame;
+  weight_torque_sensor_frame[0] = weight_force_arm_sensor_frame[1]*weight_force_sensor_frame[2]-weight_force_arm_sensor_frame[2]*weight_force_sensor_frame[1];
+  weight_torque_sensor_frame[1] = weight_force_arm_sensor_frame[2]*weight_force_sensor_frame[0]-weight_force_arm_sensor_frame[0]*weight_force_sensor_frame[2];
+  weight_torque_sensor_frame[2] = weight_force_arm_sensor_frame[0]*weight_force_sensor_frame[1]-weight_force_arm_sensor_frame[1]*weight_force_sensor_frame[0];
+
 	tf::Vector3 meas(msg.wrench.force.x,msg.wrench.force.y,msg.wrench.force.z);
+  tf::Vector3 meas_torque(msg.wrench.torque.x,msg.wrench.torque.y,msg.wrench.torque.z);
+
 	f = meas - weight_force_sensor_frame;
-  
+  t = meas_torque - weight_torque_sensor_frame;
 	return true;
 }
 
@@ -387,8 +366,9 @@ void ArmsManager::FTsensor_callback_left(const geometry_msgs::WrenchStamped::Con
 	ROS_DEBUG_STREAM("FTsensor_callback_left");
 
 	tf::Vector3 meas;
+  tf::Vector3 meas_t;
 	bool compensation_ok;
-	compensation_ok = gravityCompensation(ee_mass_left, *msg, meas);
+	compensation_ok = gravityCompensation(ee_mass_left, *msg, meas, meas_t);
 	if (!compensation_ok)
 		return;
 
@@ -400,8 +380,10 @@ void ArmsManager::FTsensor_callback_left(const geometry_msgs::WrenchStamped::Con
 		if (calibration_counter_left_ <= calibration_number)
 		{
 		    bias_force_left_ = bias_force_left_*calibration_counter_left_ + meas;
-		    calibration_counter_left_++;
 		    bias_force_left_ /= calibration_counter_left_;
+        bias_torque_right_ = bias_torque_right_*calibration_counter_right_ + meas_t;
+        calibration_counter_right_++;
+        bias_torque_right_ /= calibration_counter_right_;
 		    ROS_INFO_STREAM("#" << calibration_counter_left_ << ": actual estimation " << bias_force_left_[0] << "," << bias_force_left_[1] << "," << bias_force_left_[2] <<"]");
 		}
 
@@ -411,6 +393,8 @@ void ArmsManager::FTsensor_callback_left(const geometry_msgs::WrenchStamped::Con
 	else
 	{
 		meas = meas - bias_force_left_;
+    meas_t = meas_t - bias_torque_left_;
+
 		ROS_DEBUG_STREAM("force unbiased and compensed: [" << meas[0] << "," << meas[1] << "," << meas[2] << "]");
 		
 		//FIXME To be optimized by using functions and standard maps. To be trusted!!
@@ -482,6 +466,10 @@ void ArmsManager::FTsensor_callback_left(const geometry_msgs::WrenchStamped::Con
     msg_com.wrench.force.x = meas[0];
     msg_com.wrench.force.y = meas[1];
     msg_com.wrench.force.z = meas[2];
+    msg_com.wrench.torque.x = meas_t[0];
+    msg_com.wrench.torque.y = meas_t[1];
+    msg_com.wrench.torque.z = meas_t[2];
+
     pub_compensated_left.publish(msg_com);
 
 		force_flag_left.store(force_flag);
@@ -496,8 +484,9 @@ void ArmsManager::FTsensor_callback_right(const geometry_msgs::WrenchStamped::Co
 	ROS_DEBUG_STREAM("FTsensor_callback_right");
 
 	tf::Vector3 meas;
+  tf::Vector3 meas_t;
 	bool compensation_ok;
-	compensation_ok = gravityCompensation(ee_mass_right,*msg,meas);
+	compensation_ok = gravityCompensation(ee_mass_right,*msg,meas, meas_t);
 	if (!compensation_ok)
 		return;
 
@@ -507,18 +496,23 @@ void ArmsManager::FTsensor_callback_right(const geometry_msgs::WrenchStamped::Co
 	{
 		//calibrate
 		if (calibration_counter_right_ <= calibration_number)
-		{
+		{   
 		    bias_force_right_ = bias_force_right_*calibration_counter_right_ + meas;
-		    calibration_counter_right_++;
+        bias_torque_right_ = bias_torque_right_*calibration_counter_right_ + meas_t;
+        calibration_counter_right_++; 
 		    bias_force_right_ /= calibration_counter_right_;
 		    ROS_INFO_STREAM("#" << calibration_counter_right_ << ": actual estimation " << bias_force_right_[0] << "," << bias_force_right_[1] << "," << bias_force_right_[2] <<"]");
-		}
+        bias_torque_right_ /= calibration_counter_right_;
+    }
 		if (calibration_counter_right_ == calibration_number)
 		    ROS_INFO_STREAM("Calibrated right sensor. Estimated bias: [" << bias_force_right_[0] << "," << bias_force_right_[1] << "," << bias_force_right_[2] <<"]");
-	}
+	      ROS_INFO_STREAM("Calibrated right sensor. Estimated bias torque: [" << bias_torque_right_[0] << "," << bias_torque_right_[1] << "," << bias_torque_right_[2] <<"]");
+
+  }
 	else
 	{
 		meas = meas - bias_force_right_;
+    meas_t = meas_t - bias_torque_right_;
 		ROS_DEBUG_STREAM("force unbiased and compensed: ["<<meas[0]<<","<<meas[1]<<","<<meas[2]<<"]");
 		
 		bool stop_left = false;
@@ -589,6 +583,9 @@ void ArmsManager::FTsensor_callback_right(const geometry_msgs::WrenchStamped::Co
     msg_com.wrench.force.x = meas[0];
     msg_com.wrench.force.y = meas[1];
     msg_com.wrench.force.z = meas[2];
+    msg_com.wrench.torque.x = meas_t[0];
+    msg_com.wrench.torque.y = meas_t[1];
+    msg_com.wrench.torque.z = meas_t[2];
     pub_compensated_right.publish(msg_com);
 
 		//Update the flags and stop the arms eventually
@@ -657,7 +654,7 @@ void ArmsManager::run()
 
       if (!use_force_sensor_right_ && !use_force_sensor_left_)
 	      ros::spinOnce();
-        // publishCamera();
+
       f.sleep();
   }
 

@@ -29,7 +29,7 @@ else % strcmp(reference, 'reverse_priority') <-- default reference system
 end
 
 %% velvet offset wrt the left_arm_7_link in local frame
-velvet_offset_local = [0; 0.05; -0.14];
+velvet_offset_local = [0; 0.05; -0.15];
 
 %% transformation to obtain the velvet offset in global reference system
 % angle offset of left_arm_7_link wrt the global frame
