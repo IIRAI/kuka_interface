@@ -102,6 +102,7 @@ for k = 2 : iter_num
     if x{15,k} < cons_table_x  % x less than table, deactivate z constraint
         x_cons(16) = 0;
         % x_cons(16) = (x{15, k} - limit_q) / limit_m;
+        % x_cons(16) = (x{15, k} * limit_m) + limit_q;
     else
         x_cons(16) = cons_table_z;
     end

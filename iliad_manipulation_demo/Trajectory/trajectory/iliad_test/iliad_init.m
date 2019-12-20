@@ -1,10 +1,10 @@
 %%ILIAD_INIT initializes the iliad_test variables and ROS environment
 % Remarks:
-%  - The left arm is the lower one, which is equipped with the velvet-tray.
+%  - The left arm is the lower one,  which is equipped with the velvet-tray.
 %  - The right arm is the upper one, which is equipped with the soft-hand.
 
 rosshutdown
-rosinit%('http://192.168.0.150:11311')
+rosinit
 
 %% Simulink parameters
 

@@ -51,16 +51,12 @@ Then run the `iliad_main.m`, each cell separately and follow the instruction.
 
 To setup the robot comunication check that:
 
-1. In `iliad_init.m` when initializing ros in matlab check to specify the ip address, that is uncomment:
+1. specify the ROS ip address in your terminal (add them in your `.basrc` and source it)
 
-    rosinit('http://192.168.0.150:11311')
-
-2. specify this also in your terminal (add them in your `.basrc` and source it)
-
-    export ROS_MASTER_URI=http://192.168.0.150:11311
+    export ROS_MASTER_URI=http://192.168.0.150:11311  
     export ROS_IP=192.168.0.150
 
-3. after attaching the usb cable of the robot to the computer enable the permission to use it
+2. after attaching the usb cable of the robot to the computer enable the permission to use it
 
     sudo chmod 777 /dev/ttyUSB0
 

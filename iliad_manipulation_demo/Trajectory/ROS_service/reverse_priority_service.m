@@ -47,6 +47,10 @@ elseif strcmp(ee_name, 'full_robot')
 else
     disp('***** # waypoints:')
     disp(length(waypoints))
+    for i = 1 : length(waypoints)
+        disp(waypoints(i).Position)
+        disp(waypoints(i).Orientation)
+    end
     disp('*******************')
     if length(waypoints) > 2
         waypoint_position    = waypoints(2).Position;
