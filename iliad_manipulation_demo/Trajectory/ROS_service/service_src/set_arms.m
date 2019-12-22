@@ -1,7 +1,9 @@
 function set_arms(waypoints)
 % description
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 global manipulation_mov
 
 poses = zeros(6, 2);

@@ -18,7 +18,9 @@
 %            `pose_right_def`
 %      they are defined in the `init` script of the `iliad_test`.
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 %% left arm position
 left = input(sim_name + ' command: $ left pose [idle]: ');

@@ -5,7 +5,9 @@
 % evaluates the end-effectors pose based on the object pose (given as
 % input).
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 %% object position
 obj_pose = input(sim_name + ' command: $ object position [table ref]: ');

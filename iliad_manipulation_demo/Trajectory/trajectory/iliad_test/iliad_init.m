@@ -9,6 +9,8 @@ rosinit
 %% Simulink parameters
 
 %global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 global pose_left_def pose_right_def
 global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
 manipulation_mov = [];

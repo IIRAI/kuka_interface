@@ -3,7 +3,9 @@
 % iliad_test command line
 
 global pose_left_def pose_right_def
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 %% deactivate command loop flag
 ask_command = 0;

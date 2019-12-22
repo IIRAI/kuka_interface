@@ -5,6 +5,9 @@ clc
 display_help;
 disp(' ');
 
+data = iliad_data();
+sim_name = data.sim_name;
+
 % command loop flag
 ask_command = 1;
 

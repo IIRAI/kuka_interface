@@ -7,8 +7,10 @@ function arm_waypoint(ee_name, pose_global)
 %                       [x, y, z]: waypoint position
 %                       [Z, Y, Z]: waypoint orientation
 
-global sim_name
-global manipulation_mov
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
+% global manipulation_mov
 
 persistent old_right old_left
 if isempty(old_right)
@@ -17,7 +19,7 @@ end
 if isempty(old_left)
     old_left = zeros(6,1);
 end
-  
+
 pose = global2table(pose_global);
 % checkity check, chick chack
 if pose(4) == 0 && pose(5) == 0 && pose(6) == 0 && (strcmp(ee_name, 'right_hand') || strcmp(ee_name, 'closed_hand') || strcmp(ee_name, 'opened_hand'))

@@ -2,7 +2,9 @@
 % The Icode is used to switch from a state to another in the vito-iliad
 % finite-state machine.
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 if strcmp(cmd, 'I')
     warning('Specify the Icode number! admissible input: I0, I1 etc...')

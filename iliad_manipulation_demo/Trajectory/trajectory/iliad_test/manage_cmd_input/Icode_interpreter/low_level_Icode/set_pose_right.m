@@ -22,7 +22,9 @@ function set_pose_right(right, reference)
 %   manipulation project adopted a different reference system for the hand
 %   and a different [0, 0, 0] orientation.
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 if ~isempty(right) % input position if empty mantain position
     if isnan(right(1))      % change just the orientation

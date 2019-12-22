@@ -2,7 +2,9 @@
 
 % Remark: all the admissible commands must be written in lower case!
 
-global sim_name
+% global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 switch cmd
     case 'h'         % print help

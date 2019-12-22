@@ -1,6 +1,8 @@
 %% ENABLE_ILIAD defines default command to be executed when the robot is enabled
 
-global sim_name;
+% global sim_name;
+data = iliad_data();
+sim_name = data.sim_name;
 
 set_param(sim_name + '/enable','Value', '1');
 if strcmp(sim_name, "iliad_ctrl")  % if real robot set up the ee too

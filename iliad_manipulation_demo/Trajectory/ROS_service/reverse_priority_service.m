@@ -19,7 +19,8 @@ function response = reverse_priority_service(~, reqMsg, response)
 disp('########################################################################')
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 
-global sim_name
+data = iliad_data();
+sim_name = data.sim_name;
 
 % retrieve message informations
 command   = reqMsg.Command;
@@ -45,13 +46,6 @@ elseif strcmp(ee_name, 'full_robot')
         set_arms(waypoints(2:3));
     end
 else
-    disp('***** # waypoints:')
-    disp(length(waypoints))
-    for i = 1 : length(waypoints)
-        disp(waypoints(i).Position)
-        disp(waypoints(i).Orientation)
-    end
-    disp('*******************')
     if length(waypoints) > 2
         waypoint_position    = waypoints(2).Position;
         waypoint_orientation = waypoints(2).Orientation;
