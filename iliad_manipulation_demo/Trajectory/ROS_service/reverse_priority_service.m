@@ -16,7 +16,7 @@ function response = reverse_priority_service(~, reqMsg, response)
 %   ee_name  -->   EeName
 
 %%
-disp('########################################################################')
+disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 disp(' ***** Received request from Dual Manipulation ROS ***** ')
 
 data = iliad_data();
@@ -35,8 +35,7 @@ disp('***************')
 
 if strcmp(command, 'home')
     disp('going home...')
-    set_param(sim_name + '/Icode','Value', '0');
-    open_hand;
+    set_hand_synergy(0);  % open hand
 elseif strcmp(ee_name, 'full_robot')
     disp('# of wps in `full_robot`: ')
     disp(length(waypoints))
@@ -45,6 +44,10 @@ elseif strcmp(ee_name, 'full_robot')
     else
         set_arms(waypoints(2:3));
     end
+elseif isempty(waypoints) && strcmp(ee_name, 'closed_hand')
+    pose_global = [0; 0; 0; 0; 0; 0];
+    % manage received waypoint
+    arm_waypoint(ee_name, pose_global);
 else
     if length(waypoints) > 2
         waypoint_position    = waypoints(2).Position;

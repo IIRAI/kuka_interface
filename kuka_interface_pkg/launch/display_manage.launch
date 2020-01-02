@@ -1,0 +1,10 @@
+<launch>
+
+    <!-- launch iliad robot in gazebo -->
+    <include file="$(find vito_description)/launch/display.launch"/>
+
+    <!-- launch manager node to interface with ILAD -->
+    <node name="arms_manager" pkg="kuka_interface_pkg" type="arms_manager_node"/>
+    <node name="ee_manager" pkg="kuka_interface_pkg" type="ee_manager_node"/>
+
+</launch>

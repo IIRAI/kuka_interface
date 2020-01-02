@@ -5,6 +5,7 @@ function set_arms(waypoints)
 data = iliad_data();
 sim_name = data.sim_name;
 global manipulation_mov
+global hand_synergy
 
 poses = zeros(6, 2);
 
@@ -56,6 +57,12 @@ end
 
 waypoint = [pose_left; pose_right];
 manipulation_mov = [manipulation_mov, waypoint];
+if isempty(hand_synergy)
+    last_syn = 0;
+else
+    last_syn = hand_synergy(end);
+end
+hand_synergy = [hand_synergy, last_syn];
 
 disp('setting Icode value to 3...')
 set_param(sim_name + '/Icode', 'Value', '3');

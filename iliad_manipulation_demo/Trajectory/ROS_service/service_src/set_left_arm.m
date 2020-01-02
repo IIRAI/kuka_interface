@@ -6,6 +6,7 @@ function set_left_arm(pose)
 % stores the waypoints from (dual manipulation) to be executed
 % in this function the new waypoint is added to this list
 global manipulation_mov
+global hand_synergy
 
 % update simulink model
 disp('setting LEFT hand')
@@ -27,6 +28,8 @@ end
 waypoint = divide_tr_or_left(pose_left);
 
 manipulation_mov = [manipulation_mov, waypoint];
+last_syn = hand_synergy(end);
+hand_synergy     = [hand_synergy, last_syn]; 
 
 end
 

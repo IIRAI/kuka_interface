@@ -41,22 +41,15 @@ disp('of the end effector')
 disp(ee_name)
 
 if strcmp(ee_name, 'right_hand')
-    set_right_arm(pose);
-    set_param(sim_name + '/hand_synergy', 'Value', '0');  % open hand
+    set_right_arm(pose, -1);
 elseif strcmp(ee_name, 'left_hand')
     set_left_arm(pose);
 elseif strcmp(ee_name, 'closed_hand')
-    set_right_arm(pose);
-    set_param(sim_name + '/hand_synergy', 'Value', '1');  % close hand
+    set_right_arm(pose, 0.7);
 elseif strcmp(ee_name, 'opened_hand')
-    set_right_arm(pose);
-    set_param(sim_name + '/hand_synergy', 'Value', '0');  % open hand
+    set_right_arm(pose, 0);
 else % here should be something like full robot
-    % homing
-%     disp(ee_name)
-%     disp('full robot is called')
-%     waypoint = zeros(12,1);
-%     manipulation_mov = [manipulation_mov, waypoint];
+    % default implementation
 end
 
 disp('setting Icode value to 3...')

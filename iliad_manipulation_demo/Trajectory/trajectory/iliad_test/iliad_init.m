@@ -13,7 +13,10 @@ data = iliad_data();
 sim_name = data.sim_name;
 global pose_left_def pose_right_def
 global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
+global hand_synergy                  % stores the synergies from (dual manipulation) to be executed
+
 manipulation_mov = [];
+hand_synergy = [];
 
 global table_rs  % position of the reference system of the table in <world> frame
 table_rs = [1.3500; 1.2010; 0.7000];
