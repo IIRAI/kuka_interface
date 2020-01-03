@@ -10,8 +10,8 @@ global manipulation_mov
 global hand_synergy
 
 if size(manipulation_mov, 2) ~= size(hand_synergy, 2)
-    disp(' ')
-    warning('some dual manipulation waypoints have not hand synergy set!!!')
+    hand_synergy = zeros(1, size(manipulation_mov, 2));
+    disp('some dual manipulation waypoints have not hand synergy set!!!')
     disp(' ')
 end
 
@@ -21,10 +21,10 @@ change_state = 0; % by default no change state
 if n_col > 1
     % waypoint
     manipulation = manipulation_mov(:,1);
-    manipulation_mov = manipulation_mov(:,2:n_col);  % delete first waypoint
+    manipulation_mov = manipulation_mov(:, 2:n_col);  % delete first waypoint
     % synergy
     set_hand_synergy(hand_synergy(1));
-    hand_synergy = hand_synergy(2:end);  % delete first synergy
+    hand_synergy = hand_synergy(:, 2:end);  % delete first synergy
     % flag
     if manipulation == zeros(12,1)
         change_state = 1;
