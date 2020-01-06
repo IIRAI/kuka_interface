@@ -14,7 +14,7 @@ dmX = dm_angle(3);
 
 % evaluate ZY in reverse priority
 
-sin_rpY = -(cos(dmZ) * sin(dmX) * sin(dmY)) - (cos(dmX) * sin(dmZ));
+sin_rpY = -(cos(dmZ) * sin(dmX) * sin(dmY)) + (cos(dmX) * sin(dmZ));
 
 yX = - (cos(dmY) * cos(dmZ));
 xX = ((cos(dmZ) * cos(dmX) * sin(dmY)) + (sin(dmX) * sin(dmZ)));
@@ -26,11 +26,22 @@ rpY = asin(sin_rpY);
 rpX = atan2(yX, xX);
 rpZ = atan2(yZ, xZ);
 
+% fix a limit for the x rotation
 if rpX < -1.10  % limite poco più di 120° 
     rpX = -1.10;
 end
 
+% limit rpZ in [0, 2*pi)
+rpZ = rpZ - pi;  % manual fix from dm to pr transformation
+while rpZ >= 2 * 3.14
+    rpZ = rpZ - (2 * 3.14);
+end
+while rpZ <= - 2 * 3.14
+    rpZ = rpZ + (2 * 3.14);
+end
+
+
 % set up the output
-rp_angle = [rpZ - pi; rpY; rpX];
+rp_angle = [rpZ; rpY; rpX];
 
 end

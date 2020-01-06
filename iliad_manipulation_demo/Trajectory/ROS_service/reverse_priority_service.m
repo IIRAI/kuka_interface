@@ -27,11 +27,19 @@ command   = reqMsg.Command;
 ee_name   = reqMsg.EeName;
 waypoints = reqMsg.Waypoints;
 
+disp('************************************************************************')
 disp('***** command:')
 disp(command)
 disp('***** ee_name:')
 disp(ee_name)
-disp('***************')
+disp('***** n° waypoints:')
+disp(size(waypoints))
+disp('***** lista di waypoints:')
+for i = 1 : size(waypoints)
+    waypoints(i).Position
+    waypoints(i).Orientation
+end
+disp('************************************************************************')
 
 if strcmp(command, 'home')
     disp('going home...')
