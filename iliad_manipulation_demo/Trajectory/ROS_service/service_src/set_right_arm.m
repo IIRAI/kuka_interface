@@ -16,15 +16,19 @@ if isnan(pose_right)
     pose_right = zeros(6,1);
 end
 waypoint = [zeros(6,1); pose_right];
+
 manipulation_mov = [manipulation_mov, waypoint];
+
 if synergy == -1
     if isempty(hand_synergy)
-        synergy = 0;
+        synergy = 0.0;
     else
         synergy = hand_synergy(end);
     end
 end
-hand_synergy     = [hand_synergy, synergy]; 
-
+disp(' ')
+disp(' hand synergies array: ')
+hand_synergy = [hand_synergy, synergy]
+disp(' ')
 end
 

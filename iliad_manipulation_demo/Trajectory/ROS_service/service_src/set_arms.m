@@ -28,22 +28,19 @@ for t = 1 : length(waypoints)
     poses(:, t) = global2table(pose_global);
 end
 
+% update simulink model
+disp('setting FULL ROBOT')
+
+if isnan(poses(4:6,1)) | poses(4:6,1) == zeros(3,1) % right hand
+    poses(4:6,1) = [0.0; 1.57; 0.0];
+end
+if isnan(poses(4:6,2)) | poses(4:6,2) == zeros(3,1)  % left hand
+    poses(4:6,2) = [3.14; 1.57; 0.0];
+end
 
 disp('++++++++++++++++++++++++++')
 poses
 disp('++++++++++++++++++++++++++')
-
-
-% update simulink model
-disp('setting FULL ROBOT')
-
-if isnan(poses(4:6,1))  % right hand
-    poses(4:6,1) = [0.0; 1.57; 0.0];
-end
-
-if isnan(poses(4:6,2))  % left hand
-    poses(4:6,2) = [3.14; 1.57; 0.0];
-end
 
 % convert dual manipulation pose to reverse priority reference system
 pose_right = ee_2_right7link(poses(:,1), 'dual_manipulation');
@@ -58,7 +55,7 @@ end
 waypoint = [pose_left; pose_right];
 manipulation_mov = [manipulation_mov, waypoint];
 if isempty(hand_synergy)
-    last_syn = 0;
+    last_syn = 0.0;
 else
     last_syn = hand_synergy(end);
 end

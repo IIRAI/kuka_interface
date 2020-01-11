@@ -10,7 +10,6 @@ function arm_waypoint(ee_name, pose_global)
 % global sim_name
 data = iliad_data();
 sim_name = data.sim_name;
-% global manipulation_mov
 
 persistent old_right old_left
 if isempty(old_right)
@@ -45,9 +44,12 @@ if strcmp(ee_name, 'right_hand')
 elseif strcmp(ee_name, 'left_hand')
     set_left_arm(pose);
 elseif strcmp(ee_name, 'closed_hand')
-    set_right_arm(pose, 0.7);
+    disp(' ')
+    disp('***** CLOSING HAND *****')
+    disp(' ')
+    set_right_arm(pose, 0.5);
 elseif strcmp(ee_name, 'opened_hand')
-    set_right_arm(pose, 0);
+    set_right_arm(pose, 0.0);
 else % here should be something like full robot
     % default implementation
 end

@@ -28,12 +28,15 @@ end
 waypoint = divide_tr_or_left(pose_left);
 
 manipulation_mov = [manipulation_mov, waypoint];
-if isempty(hand_synergy)
-    last_syn = 0;
-else
-    last_syn = hand_synergy(end);
+
+for i = 1 : size(waypoint, 2)
+    if isempty(hand_synergy)
+        last_syn = 0.0;
+    else
+        last_syn = hand_synergy(end);
+    end
+    hand_synergy = [hand_synergy, last_syn]; 
 end
-hand_synergy = [hand_synergy, last_syn]; 
 
 end
 

@@ -1,5 +1,5 @@
 function [manipulation, change_state] = retrieve_mov()
-%RETRIEVE_MOV
+%RETRIEVE_MOV returns the next waypoint to be executed from dual-manipulation
 %   - `change_state`: 0, do not change state
 %                     1, go home
 %                     2, stay idle
@@ -9,9 +9,19 @@ function [manipulation, change_state] = retrieve_mov()
 global manipulation_mov
 global hand_synergy
 
+disp(' ')
+disp(' ')
+disp(' list of the hand synergy DHN:')
+disp(hand_synergy)
+disp('n° of waypoint for both manipulation and synergy:')
+size(manipulation_mov, 2)
+size(hand_synergy, 2)
+disp(' ')
+disp(' ')
+
 if size(manipulation_mov, 2) ~= size(hand_synergy, 2)
     hand_synergy = zeros(1, size(manipulation_mov, 2));
-    disp('some dual manipulation waypoints have not hand synergy set!!!')
+    warn('some dual manipulation waypoints have not hand synergy set!!!')
     disp(' ')
 end
 
