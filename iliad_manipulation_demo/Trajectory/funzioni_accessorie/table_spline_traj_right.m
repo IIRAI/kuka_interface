@@ -182,30 +182,30 @@ for i = 1:t_prova
     x_or_ee_des(:, :, i) = quat2rotm(theta_traj(i, :));
 end
 
- iter_num_1 = t_prova;
+iter_num_1 = t_prova;
         
-        x_des = cell(N, iter_num_1);  % init for speed
-        for k = 1 : iter_num_1
-            x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max;...
-                          xj6_min; xj5_max; xj5_min; xj4_max; xj4_min;...
-                          xj3_max; xj3_min; xj2_max; xj2_min;...
-                          table_ee_x; table_ee_z;...
-                          traj(:,k); x_or_ee_des(:,:,k)};
-        end
-        % variables for RP algorithm
+x_des = cell(N, iter_num_1);  % init for speed
+for k = 1 : iter_num_1
+    x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max;...
+                  xj6_min; xj5_max; xj5_min; xj4_max; xj4_min;...
+                  xj3_max; xj3_min; xj2_max; xj2_min;...
+                  table_ee_x; table_ee_z;...
+                  traj(:,k); x_or_ee_des(:,:,k)};
+end
+% variables for RP algorithm
     
-    % flag showing if p is a task or a constraint  
-    unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % max/min joints
-                   1, 2,...   % table constraint
-                   0, 0];  % trajectory and orientation task
-    
-    % constraint value (NaN when not present)
-    x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...  % max/min joints
-              xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...  % max/min joints
-              xj2_max, xj2_min,...                                      % max/min joints
-              table_ee_x, table_ee_z,...                                % table constraint
-              NaN, NaN];                                                % trajectory and orientation task
-disp('Here');
+% flag showing if p is a task or a constraint  
+unil_constr = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,...  % max/min joints
+               1, 2,...   % table constraint
+               0, 0];  % trajectory and orientation task
+
+% constraint value (NaN when not present)
+x_cons = [xee_max, xee_min, xj7_max, xj7_min, xj6_max, xj6_min,...  % max/min joints
+          xj5_max, xj5_min, xj4_max, xj4_min, xj3_max, xj3_min,...  % max/min joints
+          xj2_max, xj2_min,...                                      % max/min joints
+          table_ee_x, table_ee_z,...                                % table constraint
+          NaN, NaN];                                                % trajectory and orientation task
+
 %% algorithm
 
 % define function handles of J and T for the fast version

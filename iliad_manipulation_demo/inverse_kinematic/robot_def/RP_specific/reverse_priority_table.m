@@ -26,13 +26,13 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
     cons_table_z = x_cons(16);
 
     %% ------------------------------------------------
-    limit_x = 1.20;
-    limit_z = 0.10;
+    limit_x = 1.00;
+    limit_z = 0.50;
 
     limit_m = (cons_table_z - limit_z) / ...
               (cons_table_x - limit_x);
 
-    limit_q = ((cons_table_z * limit_x) - (cons_table_x * limit_z)) / ...
+    limit_q = ((cons_table_x * limit_z) - (cons_table_z * limit_x)) / ...
               (cons_table_x - limit_x);
     %% ------------------------------------------------
 
@@ -83,9 +83,9 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
         % check the position of the ee in the x and z axis and activate 
         % or deactivate the table constraint accordingly
         if x{15, k} < cons_table_x  % x less than table, deactivate z constraint
-            x_cons(16) = 0;
+            % x_cons(16) = 0;
             % x_cons(16) = (x{15, k} - limit_q) / limit_m;
-            % x_cons(16) = (x{15, k} * limit_m) + limit_q;
+            x_cons(16) = (x{15, k} * limit_m) + limit_q;
         else
             x_cons(16) = cons_table_z;
         end
@@ -93,6 +93,7 @@ function [q, qd, e] = reverse_priority_table(N, Ts, iter_num, J_and_T_hand, q_0,
             x_cons(15) = 10000;
         else
             x_cons(15) = cons_table_x;
+            %x_cons(15) = 10000;
         end
 
         % numeric jacobian

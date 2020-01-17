@@ -25,7 +25,11 @@ if pose_left(4) <= 0.05 && pose_left(4) >= -0.05 &&...
 end
 
 % waypoint = [pose_left; zeros(6,1)];
-waypoint = divide_tr_or_left(pose_left);
+if isempty(manipulation_mov)
+    waypoint = avoid_table(pose_left, 0);
+else
+    waypoint = avoid_table(pose_left, manipulation_mov(3, end));
+end
 
 manipulation_mov = [manipulation_mov, waypoint];
 

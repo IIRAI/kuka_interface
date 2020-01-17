@@ -9,4 +9,3 @@ activate_command
 
 %% close matlab-ROS global node and clear all workspace variables
 iliad_end
- 

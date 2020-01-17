@@ -27,8 +27,7 @@ if synergy == -1
     end
 end
 disp(' ')
-disp(' hand synergies array: ')
-hand_synergy = [hand_synergy, synergy]
+hand_synergy = [hand_synergy, synergy];
 disp(' ')
 end
 

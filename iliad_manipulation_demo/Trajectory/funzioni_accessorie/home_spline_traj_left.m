@@ -186,11 +186,11 @@ end
         
         x_des = cell(N, iter_num_1);  % init for speed 
         for k = 1 : iter_num_1
-             x_des(:,k) = {  xee_max; xee_min; xj7_max; xj7_min; xj6_max; ... % ******
-                             xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ... % ******
-                             xj3_max; xj3_min; xj2_max; xj2_min; ...
-                             traj(:,k); x_or_ee_des(:,:,k);...
-                             qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7)};
+             x_des(:,k) = {xee_max; xee_min; xj7_max; xj7_min; xj6_max; ... % ******
+                           xj6_min; xj5_max; xj5_min; xj4_max; xj4_min; ... % ******
+                           xj3_max; xj3_min; xj2_max; xj2_min; ...
+                           traj(:,k); x_or_ee_des(:,:,k);...
+                           qhl(1); qhl(2); qhl(3); qhl(4); qhl(5); qhl(6); qhl(7)};
         end        
         
         % variables for RP algorithm

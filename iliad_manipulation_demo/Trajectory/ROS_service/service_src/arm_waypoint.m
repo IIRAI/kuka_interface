@@ -44,9 +44,6 @@ if strcmp(ee_name, 'right_hand')
 elseif strcmp(ee_name, 'left_hand')
     set_left_arm(pose);
 elseif strcmp(ee_name, 'closed_hand')
-    disp(' ')
-    disp('***** CLOSING HAND *****')
-    disp(' ')
     set_right_arm(pose, 0.5);
 elseif strcmp(ee_name, 'opened_hand')
     set_right_arm(pose, 0.0);

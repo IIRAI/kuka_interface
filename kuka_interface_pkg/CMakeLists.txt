@@ -51,6 +51,10 @@ add_executable(homing src/homing.cpp)
 add_dependencies(homing ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(homing ${catkin_LIBRARIES})
 
+add_executable(scanning src/scanning.cpp)
+add_dependencies(scanning ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(scanning ${catkin_LIBRARIES})
+
 add_executable(single_lwr_homing src/single_lwr_homing.cpp)
 add_dependencies(single_lwr_homing ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(single_lwr_homing ${catkin_LIBRARIES})
