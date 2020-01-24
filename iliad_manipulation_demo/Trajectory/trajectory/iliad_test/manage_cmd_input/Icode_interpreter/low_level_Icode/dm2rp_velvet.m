@@ -27,8 +27,8 @@ rpX = atan2(yX, xX);
 rpZ = atan2(yZ, xZ);
 
 % fix a limit for the x rotation
-if rpX < -1.10  % limite poco più di 120° 
-    rpX = -1.10;
+if rpX < -0.90  % limite poco più di 120° 
+    rpX = -0.90;
 end
 
 % limit rpZ in [0, 2*pi)

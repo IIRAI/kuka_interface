@@ -15,7 +15,7 @@ else
             if strcmp(sim_name, "iliad_test")
                 open_hand;
             elseif strcmp(sim_name, "iliad_ctrl")
-                disp('setting up the end-effextors...')
+                disp('setting up the end-effectors...')
                 % open hand command I6
                 set_param(sim_name + '/hand_synergy', 'Value', sprintf('%f', 0));
                 % unroll elvet tray
