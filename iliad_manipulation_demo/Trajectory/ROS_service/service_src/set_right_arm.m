@@ -12,9 +12,20 @@ global hand_synergy
 disp('setting RIGHT hand')
 % convert dual manipulation pose to reverse priority reference system
 pose_right = ee_2_right7link(pose, 'dual_manipulation');
-if isnan(pose_right)
+if any(isnan(pose_right), 'all')
     pose_right = zeros(6,1);
 end
+
+disp(' ')
+disp(' ')
+
+disp('pose_right')
+disp(pose_right)
+
+disp(' ')
+disp(' ')
+
+
 waypoint = [zeros(6,1); pose_right];
 
 manipulation_mov = [manipulation_mov, waypoint];

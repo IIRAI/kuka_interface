@@ -42,17 +42,26 @@ disp('++++++++++++++++++++++++++')
 poses
 disp('++++++++++++++++++++++++++')
 
+% select the proper waypoint for the left arm and the right arm
+if poses(3,1) > poses(3,2)  % the right arm z value must be higher than the left arm
+    r_pose = poses(:,1);
+    l_pose = poses(:,2);
+else
+    r_pose = poses(:,2);
+    l_pose = poses(:,1);
+end
+
 % convert dual manipulation pose to reverse priority reference system
-pose_right = ee_2_right7link(poses(:,1), 'dual_manipulation');
+pose_right = ee_2_right7link(r_pose, 'dual_manipulation');
 if isnan(pose_right)
     pose_right = zeros(6,1);
 end
-pose_left = ee_2_left7link(poses(:,2), 'dual_manipulation');
+pose_left = ee_2_left7link(l_pose, 'dual_manipulation');
 if isnan(pose_left)
     pose_left = zeros(6,1);
 end
 
-% compensate x offset when the velvet is almost vertical (from real test)
+% compensate x offset when the velvet is almost vertical
 if pose_left(4) <= 0.05 && pose_left(4) >= -0.05 &&...
    pose_left(5) <= 0.05 && pose_left(5) >= -0.05 &&...
    pose_left(6) <= -0.9

@@ -30,10 +30,23 @@ change_state = 0; % by default no change state
 
 if n_col > 1
     % waypoint
+    close_hand = 0;
+    while (all(manipulation_mov(:,1) == 0))
+        manipulation_mov = manipulation_mov(:, 2:end);  % delete first waypoint
+        if hand_synergy(1) ~= 0
+            close_hand = hand_synergy(1);
+        end
+        hand_synergy = hand_synergy(:, 2:end);      % delete first synergy
+    end
+    disp(size(manipulation_mov))
     manipulation = manipulation_mov(:,1);
-    manipulation_mov = manipulation_mov(:, 2:n_col);  % delete first waypoint
+    manipulation_mov = manipulation_mov(:, 2:end);  % delete first waypoint
     % synergy
-    set_hand_synergy(hand_synergy(1));
+    if close_hand == 0
+        set_hand_synergy(hand_synergy(1));
+    else
+        set_hand_synergy(close_hand);
+    end
     hand_synergy = hand_synergy(:, 2:end);  % delete first synergy
     % flag
     if manipulation == zeros(12,1)

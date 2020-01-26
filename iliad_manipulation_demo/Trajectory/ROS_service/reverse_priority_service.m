@@ -39,7 +39,7 @@ disp(ee_name)
 %     waypoints(i).Position
 %     waypoints(i).Orientation
 % end
-disp('******************')
+% disp('******************')
 
 if strcmp(command, 'home')
     disp('going home...')
@@ -48,11 +48,15 @@ elseif strcmp(ee_name, 'full_robot')
     disp('# of wps in `full_robot`: ')
     disp(length(waypoints))
     if length(waypoints) <= 3
-        set_arms(waypoints(end-1:end));
+        set_arms(waypoints(1:2));
     else
         set_arms(waypoints(2:3));
     end
 elseif isempty(waypoints) && strcmp(ee_name, 'closed_hand')
+    pose_global = [0; 0; 0; 0; 0; 0];
+    % manage received waypoint
+    arm_waypoint(ee_name, pose_global);
+elseif strcmp(ee_name, 'simple_closed_hand')
     pose_global = [0; 0; 0; 0; 0; 0];
     % manage received waypoint
     arm_waypoint(ee_name, pose_global);
