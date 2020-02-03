@@ -1,6 +1,6 @@
-%% END_COMMAND reset the iliad_test.slx parameter to the default values
+%% END_COMMAND reset the iliad_ctrl.slx parameter to the default values
 % this script is called when the `end` command is executed in the
-% iliad_test command line
+% iliad_ctrl command line
 
 global pose_left_def pose_right_def
 % global sim_name

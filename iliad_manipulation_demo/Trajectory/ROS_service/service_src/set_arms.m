@@ -6,8 +6,10 @@ data = iliad_data();
 sim_name = data.sim_name;
 global manipulation_mov
 global hand_synergy
+global velvet_synergy
 
 poses = zeros(6, 2);
+pose_global = zeros(6, 2);
 
 home = [1.5223, 0.9502;...
         0.8010, 0.8011;...
@@ -16,16 +18,27 @@ home = [1.5223, 0.9502;...
 for t = 1 : length(waypoints)
     waypoint_position    = waypoints(t).Position;
     waypoint_orientation = waypoints(t).Orientation;
-    pose_global = [waypoint_position.X;
-                   waypoint_position.Y;
-                   waypoint_position.Z;
-                   waypoint_orientation.Z;
-                   waypoint_orientation.Y;
-                   waypoint_orientation.X];
-    if pose_global(1:3) == zeros(3,1)
-        pose_global(1:3) = home(:,t);
+    pose_global(:, t) = [waypoint_position.X;
+                         waypoint_position.Y;
+                         waypoint_position.Z;
+                         waypoint_orientation.Z;
+                         waypoint_orientation.Y;
+                         waypoint_orientation.X];   
+end
+
+if pose_global(1:3, 1) == zeros(3,1)
+    pose_global(:, 1) = zeros(6,1);
+    pose_global(:, 2) = zeros(6,1);
+elseif pose_global(1:3, 2) == zeros(3,1)
+    pose_global(:, 1) = zeros(6,1);
+    pose_global(:, 2) = zeros(6,1);
+end
+
+for t = 1 : length(waypoints)
+    if pose_global(1:3, t) == zeros(3,1)
+        pose_global(1:3, t) = home(:,t);
     end
-    poses(:, t) = global2table(pose_global);
+    poses(:, t) = global2table(pose_global(:, t));
 end
 
 % update simulink model
@@ -101,6 +114,7 @@ manipulation_mov = [manipulation_mov, waypoint]
 disp(' ')
 disp(' ')
 
+% hand synergy
 for i = 1 : size(waypoint, 2)
     if isempty(hand_synergy)
         last_syn = 0.0;
@@ -108,6 +122,17 @@ for i = 1 : size(waypoint, 2)
         last_syn = hand_synergy(end);
     end
     hand_synergy = [hand_synergy, last_syn]; 
+end
+
+% velvet synergy
+for i = 1 : size(waypoint, 2)
+    if isempty(velvet_synergy)
+%         last_syn = 0.5;
+        last_syn = 1;
+    else
+        last_syn = velvet_synergy(end);
+    end
+    velvet_synergy = [velvet_synergy, last_syn]; 
 end
 
 disp('setting Icode value to 3...')

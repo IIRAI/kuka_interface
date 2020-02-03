@@ -8,19 +8,23 @@ function [manipulation, change_state] = retrieve_mov()
 % in this function the oldest waypoint is returned (to be executed) and deleted
 global manipulation_mov
 global hand_synergy
+global velvet_synergy;
 
 disp(' ')
 disp(' ')
-disp(' list of the hand synergy DHN:')
+disp(' list of the hand synergy:')
 disp(hand_synergy)
+disp(velvet_synergy)
 disp('n° of waypoint for both manipulation and synergy:')
 size(manipulation_mov, 2)
 size(hand_synergy, 2)
+size(velvet_synergy, 2)
 disp(' ')
 disp(' ')
 
-if size(manipulation_mov, 2) ~= size(hand_synergy, 2)
+if size(manipulation_mov, 2) ~= size(hand_synergy, 2) && size(manipulation_mov, 2) ~= size(velvet_synergy, 2)
     hand_synergy = zeros(1, size(manipulation_mov, 2));
+    velvet_synergy = zeros(1, size(manipulation_mov, 2));
     warn('some dual manipulation waypoints have not hand synergy set!!!')
     disp(' ')
 end
@@ -30,13 +34,18 @@ change_state = 0; % by default no change state
 
 if n_col > 1
     % waypoint
-    close_hand = 0;
+    close_hand   = 0;
+    close_velvet = 0;
     while (all(manipulation_mov(:,1) == 0))
         manipulation_mov = manipulation_mov(:, 2:end);  % delete first waypoint
         if hand_synergy(1) ~= 0
             close_hand = hand_synergy(1);
         end
-        hand_synergy = hand_synergy(:, 2:end);      % delete first synergy
+        if velvet_synergy(1) ~= 0
+            close_velvet = velvet_synergy(1);
+        end
+        hand_synergy   = hand_synergy(:, 2:end);      % delete first synergy
+        velvet_synergy = velvet_synergy(:, 2:end);    % delete first synergy
     end
     disp(size(manipulation_mov))
     manipulation = manipulation_mov(:,1);
@@ -47,7 +56,13 @@ if n_col > 1
     else
         set_hand_synergy(close_hand);
     end
-    hand_synergy = hand_synergy(:, 2:end);  % delete first synergy
+    if close_velvet == 0
+        set_velvet_synergy(velvet_synergy(1));
+    else
+        set_velvet_synergy(close_velvet);
+    end
+    hand_synergy   = hand_synergy(:, 2:end);  % delete first synergy
+    velvet_synergy = velvet_synergy(:, 2:end);  % delete first synergy
     % flag
     if manipulation == zeros(12,1)
         change_state = 1;
@@ -59,6 +74,8 @@ elseif n_col == 1
     % synergy
     set_hand_synergy(hand_synergy(1));
     hand_synergy = [];  % reset synergy
+    set_velvet_synergy(velvet_synergy(1));
+    velvet_synergy = [];  % reset synergy
     if manipulation == zeros(12,1)
         change_state = 1;
     end

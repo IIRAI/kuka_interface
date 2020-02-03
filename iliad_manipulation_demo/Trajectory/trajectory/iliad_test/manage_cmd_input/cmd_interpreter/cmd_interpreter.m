@@ -14,7 +14,7 @@ switch cmd
     case 'disable'   % turn off the arms
         set_param(sim_name + '/enable','Value', '0');
     case 'end'          
-        end_command; % exit the loop and set the default value for iliad_test
+        end_command; % exit the loop and set the default value for iliad_ctrl
     otherwise         
         warning('Unexpected command, type h for help ¯\_(⊙︿⊙)_/¯ ')
 end

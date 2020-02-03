@@ -3,7 +3,7 @@
 % system.
 % Remark - how to use this command:
 %   1- If the input is left empty the robot goes to the default position
-%      defined in the `init` script of the `iliad_test`.
+%      defined in the `init` script of the `iliad_ctrl`.
 %      Note that new pose definition overwrites the default pose for the current
 %      workspace!
 %   2- The input must be a vector 6x1 the first three values are the 
@@ -16,7 +16,7 @@
 %   4- One default pose exists for each arm, they are: 
 %            `pose_left_def`
 %            `pose_right_def`
-%      they are defined in the `init` script of the `iliad_test`.
+%      they are defined in the `init` script of the `iliad_ctrl`.
 
 % global sim_name
 data = iliad_data();

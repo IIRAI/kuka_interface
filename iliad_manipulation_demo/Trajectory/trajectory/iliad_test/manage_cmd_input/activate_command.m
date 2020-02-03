@@ -1,4 +1,4 @@
-%%ACTIVATE_COMMAND interprets the `iliad_test` commands
+%%ACTIVATE_COMMAND interprets the `iliad_ctrl` commands
 
 % print table of available commands
 clc

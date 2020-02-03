@@ -8,9 +8,9 @@ function data = iliad_data()
 %           if you have a different solution to avoid global
 %           variables good for you!
 
-% data.sim_name = "iliad_test"; % for visualization
-data.sim_name = "iliad_ctrl"; % for simulation
+data.sim_name = "iliad_ctrl";   % for simulation
 
+% position of the table frame w.r.t. the world frame
 data.table_rs = [1.3500; 1.2010; 0.7000];
 
 end

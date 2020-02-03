@@ -1,4 +1,4 @@
-function set_left_arm(pose)
+function set_left_arm(pose, synergy)
 %SET_LEFT_ARM updates the waypoint list for the robot.
 %   INPUT:
 %       -`pose`: waypoint (6x1) of the left end effector (velvet-tray)
@@ -7,6 +7,7 @@ function set_left_arm(pose)
 % in this function the new waypoint is added to this list
 global manipulation_mov
 global hand_synergy
+global velvet_synergy
 
 % update simulink model
 disp('setting LEFT hand')
@@ -59,6 +60,18 @@ for i = 1 : size(waypoint, 2)
         last_syn = hand_synergy(end);
     end
     hand_synergy = [hand_synergy, last_syn]; 
+end
+
+for i = 1 : size(waypoint, 2)   
+    if synergy == -1
+        if isempty(velvet_synergy)
+%             synergy = 0.5;
+            synergy = 1;
+        else
+            synergy = velvet_synergy(end);
+        end
+    end
+    velvet_synergy = [velvet_synergy, synergy];
 end
 
 end

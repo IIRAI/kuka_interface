@@ -1,4 +1,4 @@
-function arm_waypoint(ee_name, pose_global)
+function arm_waypoint(ee_name, command, pose_global)
 %ARM_WAYPOINT manages the iliad waypoints received from Dual Manipulation
 %   Input:
 %   - `ee_name`: name of the end effector to move ('right_hand', 'left_hand')
@@ -38,17 +38,41 @@ disp('display pose in table')
 disp(pose)
 disp('of the end effector')
 disp(ee_name)
-
+ 
 if strcmp(ee_name, 'right_hand')
-    set_right_arm(pose, -1);
-elseif strcmp(ee_name, 'left_hand')
-    set_left_arm(pose);
-elseif strcmp(ee_name, 'closed_hand') || strcmp(ee_name, 'simple_closed_hand')
-    set_right_arm(pose, 0.5);
-elseif strcmp(ee_name, 'opened_hand')
-    set_right_arm(pose, 0.0);
-else % here should be something like full robot
-    % default implementation
+    if strcmp(command, 'simple_grasp')
+        disp(' ')
+        disp(' ====== right hand, simple grasp ======= ')
+        set_right_arm(pose, 0.5);
+        disp(' ')
+    elseif strcmp(command, 'simple_ungrasp')
+        disp(' ')
+        disp(' ====== right hand, simple UNgrasp ======= ')
+        set_right_arm(pose, 0.0);
+        disp(' ')
+    else
+        disp(' ')
+        disp(' ====== right hand, NOT simple grasp ======= ')
+        set_right_arm(pose, -1);
+        disp(' ')
+    end
+else % strcmp(ee_name, 'left_hand')
+    if strcmp(command, 'simple_grasp')
+        disp(' ')
+        disp(' ====== left hand, simple grasp ======= ')
+        set_left_arm(pose, 0);
+        disp(' ')
+    elseif strcmp(command, 'simple_ungrasp')
+        disp(' ')
+        disp(' ====== left hand, simple UNgrasp ======= ')
+        set_left_arm(pose, 1);
+        disp(' ')
+    else 
+        disp(' ')
+        disp(' ====== left hand, NOT simple grasp ======= ')
+        set_left_arm(pose, -1);
+        disp(' ')
+    end
 end
 
 disp('setting Icode value to 3...')

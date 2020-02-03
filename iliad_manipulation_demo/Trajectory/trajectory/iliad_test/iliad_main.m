@@ -1,4 +1,4 @@
-%% ILIAD_MAIN contains the main script to run the `iliad_test.slx`/`iliad_ctrl.slx`
+%% ILIAD_MAIN contains the main script to run the `iliad_ctrl.slx`
 % check the README.md !!!
 
 %% initialize variables

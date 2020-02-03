@@ -1,4 +1,4 @@
-%%ILIAD_INIT initializes the iliad_test variables and ROS environment
+%%ILIAD_INIT initializes the iliad_ctrl variables and ROS environment
 % Remarks:
 %  - The left arm is the lower one,  which is equipped with the velvet-tray.
 %  - The right arm is the upper one, which is equipped with the soft-hand.
@@ -14,15 +14,17 @@ sim_name = data.sim_name;
 global pose_left_def pose_right_def
 global manipulation_mov              % stores the waypoints from (dual manipulation) to be executed
 global hand_synergy                  % stores the synergies from (dual manipulation) to be executed
+global velvet_synergy
 
 manipulation_mov = [];
 hand_synergy = [];
+velvet_synergy = [];
 
 global table_rs  % position of the reference system of the table in <world> frame
 table_rs = [1.3500; 1.2010; 0.7000];
 
 % table of number of samples for the desired trajectory
-t_prova = [300,300;...
+t_prova = [200,200;...
            300,300;...
            800,800;...
            800,800;...

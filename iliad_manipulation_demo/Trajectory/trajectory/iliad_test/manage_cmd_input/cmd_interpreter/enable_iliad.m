@@ -10,7 +10,7 @@ if strcmp(sim_name, "iliad_ctrl")  % if real robot set up the ee too
     % open hand command I6
     set_param('iliad_ctrl/hand_synergy', 'Value', sprintf('%f', 0));
     % unroll elvet tray
-    set_param('iliad_ctrl/velvet_ctrl', 'Value', sprintf('%f', 1));
+    set_param('iliad_ctrl/velvet_ctrl', 'Value', sprintf('%f', 0.5));
     % define sensible axis for the velvet tray
     cmd_traj = [0 0 1 0 0 0];
     set_param('iliad_ctrl/command_trajectory_left', 'Value',...

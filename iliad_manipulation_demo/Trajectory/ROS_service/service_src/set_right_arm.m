@@ -7,6 +7,7 @@ function set_right_arm(pose, synergy)
 % in this function the new waypoint is added to this list
 global manipulation_mov
 global hand_synergy
+global velvet_synergy
 
 % update simulink model
 disp('setting RIGHT hand')
@@ -16,20 +17,11 @@ if any(isnan(pose_right), 'all')
     pose_right = zeros(6,1);
 end
 
-disp(' ')
-disp(' ')
-
-disp('pose_right')
-disp(pose_right)
-
-disp(' ')
-disp(' ')
-
-
 waypoint = [zeros(6,1); pose_right];
 
 manipulation_mov = [manipulation_mov, waypoint];
 
+% hand synergy
 if synergy == -1
     if isempty(hand_synergy)
         synergy = 0.0;
@@ -37,8 +29,16 @@ if synergy == -1
         synergy = hand_synergy(end);
     end
 end
-disp(' ')
 hand_synergy = [hand_synergy, synergy];
-disp(' ')
+
+% velvet synergy 
+if isempty(velvet_synergy)
+%     last_syn = 0.5;
+    last_syn = 1.0;
+else
+    last_syn = velvet_synergy(end);
+end
+velvet_synergy = [velvet_synergy, last_syn];
+
 end
 

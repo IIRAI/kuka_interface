@@ -27,11 +27,14 @@ command   = reqMsg.Command;
 ee_name   = reqMsg.EeName;
 waypoints = reqMsg.Waypoints;
 
-disp('******************')
-disp('***** command:')
+disp('>> command:')
+disp(' ')
 disp(command)
-disp('***** ee_name:')
+disp(' ')
+disp('>> ee_name:')
+disp(' ')
 disp(ee_name)
+% disp(' ')
 % disp('***** n° waypoints:')
 % disp(size(waypoints))
 % disp('***** lista di waypoints:')
@@ -52,18 +55,20 @@ elseif strcmp(ee_name, 'full_robot')
     else
         set_arms(waypoints(2:3));
     end
-elseif isempty(waypoints) && strcmp(ee_name, 'closed_hand')
+elseif (isempty(waypoints) && strcmp(ee_name, 'closed_hand')) ||...
+       (strcmp(ee_name, 'simple_grasp')) ||...
+       (isempty(waypoints) && strcmp(ee_name, 'opened_hand'))
     pose_global = [0; 0; 0; 0; 0; 0];
     % manage received waypoint
-    arm_waypoint(ee_name, pose_global);
-elseif strcmp(ee_name, 'simple_closed_hand')
+    arm_waypoint(ee_name, command, pose_global);
+    
+    
+elseif strcmp(command, 'simple_grasp') || strcmp(command, 'simple_ungrasp')
     pose_global = [0; 0; 0; 0; 0; 0];
     % manage received waypoint
-    arm_waypoint(ee_name, pose_global);
-elseif isempty(waypoints) && strcmp(ee_name, 'opened_hand')
-    pose_global = [0; 0; 0; 0; 0; 0];
-    % manage received waypoint
-    arm_waypoint(ee_name, pose_global);
+    arm_waypoint(ee_name, command, pose_global);
+    
+    
 else
     if length(waypoints) > 2
         waypoint_position    = waypoints(2).Position;
@@ -74,7 +79,7 @@ else
                        waypoint_orientation.Z;
                        waypoint_orientation.Y;
                        waypoint_orientation.X];
-        arm_waypoint(ee_name, pose_global);  % manage received waypoint
+        arm_waypoint(ee_name, command, pose_global);  % manage received waypoint
     else
         waypoint_position    = waypoints(1).Position;
         waypoint_orientation = waypoints(1).Orientation;
@@ -84,7 +89,7 @@ else
                        waypoint_orientation.Z;
                        waypoint_orientation.Y;
                        waypoint_orientation.X];
-        arm_waypoint(ee_name, pose_global);  % manage received waypoint
+        arm_waypoint(ee_name, command, pose_global);  % manage received waypoint
     end
 end
 

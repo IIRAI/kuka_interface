@@ -1,4 +1,4 @@
-% shut down properly the iliad_test things
+% shut down properly the iliad_ctrl things
 
 clear('RP_server') % delete the service
 rosshutdown

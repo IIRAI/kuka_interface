@@ -83,8 +83,10 @@ lambda = 0.9;
 
 % kp = 0.8;
 % ko = 0.5; 
-kp = 0.008;
-ko = 0.005;                   % orientation error gain
+kp = 0.08;
+ko = 0.05;
+% kp = 0.008;
+% ko = 0.005;                   % orientation error gain
 K = [ones(1,16), kp, ko];  	% error gain vector
 T_b_DH0 = T_b_DH0r;
 T_DH7_ee = T_DH7r_eer;

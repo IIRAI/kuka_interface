@@ -3,7 +3,7 @@ function set_pose_right(right, reference)
 %
 %   How this function interpret the input:
 %   1- If the input is left empty the robot goes to the default position
-%      defined in the `init` script of the `iliad_test`.
+%      defined in the `init` script of the `iliad_ctrl`.
 %      Note that new pose definition overwrites the default pose for the current
 %      workspace!
 %   2- The input must be a vector 6x1 the first three values are the 
@@ -15,7 +15,7 @@ function set_pose_right(right, reference)
 %            [0; 0; 0; NaN]  % the robot maintains the current orientation
 %   4- One default pose exists for each arm, they are: 
 %            `pose_right_def`
-%      they are defined in the `init` script of the `iliad_test`.
+%      they are defined in the `init` script of the `iliad_ctrl`.
 %
 %   reference: is a string with value 'reverse_priority' or 'dual_manipulation',
 %   this specifies which reference system the hand uses, since the dual
