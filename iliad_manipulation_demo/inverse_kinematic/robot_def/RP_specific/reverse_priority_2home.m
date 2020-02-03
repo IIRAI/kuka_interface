@@ -54,7 +54,8 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         
     % (qdMAX) error init for variable gain 
     e = cell(N,1);              	
-    e{22,1} = (x_des{22,1} - J_and_T_hand{3}(q_0)); 
+    % e{22,1} = (x_des{22,1} - J_and_T_hand{3}(q_0)); 
+    e{21,1} = (x_des{21,1} - J_and_T_hand{3}(q_0)); 
     
     % ---------------------------------------------------------------------
         
@@ -76,12 +77,12 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
             q7 = q(7, k-1);
 
             % numeric jacobian
-            J{22} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
-            J{23} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
+            % J{22} = J_and_T_hand{1}([q1, q2, q3, q4, q5, q6, q7]); 
+            % J{23} = J_and_T_hand{2}([q1, q2, q3, q4, q5, q6, q7]); 
 
             % actual x
-            x{22,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
-            x{23,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
+            % x{22,k} = J_and_T_hand{3}([q1, q2, q3, q4, q5, q6, q7]); 
+            % x{23,k} = J_and_T_hand{4}([q1, q2, q3, q4, q5, q6, q7]);
 
             % max/min joint limit
             x{1,k}  = q7;
@@ -147,7 +148,10 @@ function [q, qd, e] = reverse_priority_2home(N, Ts, iter_num, J_and_T_hand, q_0,
         
             % (qdMAX) scale gain by position error
             param_vect2 = param_vect;
-            if norm(e{22,k-1},2) < 0.01
+            % if norm(e{22,k-1},2) < 0.01
+            %     param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
+            % end
+            if norm(e{21,k-1},2) < 0.01
                 param_vect2(6:6+N-1) = 10 * param_vect(6:6+N-1);
             end
             
